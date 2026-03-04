@@ -76,17 +76,17 @@ export interface TekirRetryPolicy {
   /** Whether the request can be retried */
   retryable: boolean;
 
-  /** Number of seconds (or ISO 8601 duration) to wait before retrying */
-  retry_after?: number | string;
+  /** ISO 8601 duration or HTTP-date indicating when to retry. HTTP Retry-After header takes precedence if present. */
+  retry_after?: string;
 
   /** Maximum number of retry attempts recommended */
   max_attempts?: number;
 
-  /** Backoff strategy - "linear" or "exponential" */
-  backoff?: 'linear' | 'exponential';
+  /** Backoff strategy - "fixed" or "exponential" */
+  backoff?: 'fixed' | 'exponential';
 
-  /** Idempotency key so retries are safe for non-idempotent methods */
-  idempotency_key?: string;
+  /** When true, the client should generate and include an idempotency key on retries */
+  idempotency_key?: boolean;
 }
 
 /**

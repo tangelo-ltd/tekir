@@ -388,6 +388,30 @@
       overflow-x: auto;
     }
 
+    .comparison-card.before .code-wrapper {
+      background: var(--code-bg);
+      display: flex;
+      flex-direction: column;
+      min-height: 420px;
+    }
+
+    .comparison-card.before pre {
+      flex-shrink: 0;
+    }
+
+    .emptiness-msg {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FBBF24;
+      font-size: 0.9rem;
+      font-style: italic;
+      padding: 20px;
+      text-align: center;
+      opacity: 0.8;
+    }
+
     /* Features */
     .features {
       padding: 60px 0;
@@ -461,12 +485,10 @@
 
     .quickstart-cards {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    @media (max-width: 700px) {
-      .quickstart-cards { grid-template-columns: 1fr; }
+      grid-template-columns: 1fr;
+      gap: 16px;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .qs-card {
@@ -512,6 +534,37 @@
       font-size: 0.75rem;
       line-height: 1.5;
       overflow-x: auto;
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--code-text);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    pre:hover .copy-btn,
+    .qs-card:hover .copy-btn {
+      opacity: 1;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .copy-btn.copied {
+      opacity: 1;
+      color: var(--green);
+      border-color: var(--green);
     }
 
     /* Fields Table */
@@ -806,12 +859,13 @@
       <div class="comparison-grid">
         <div class="comparison-card before">
           <div class="label" data-i18n="json_without">Without TEKIR</div>
-          <pre><code>{
+          <div class="code-wrapper">
+            <pre><code>{
   "status": 410,
   "message": "Gone"
-}
-
-// Agent: "...what do I do now?"</code></pre>
+}</code></pre>
+            <div class="emptiness-msg" data-i18n="emptiness_msg">Nothing else. No context, no guidance, no next steps.<br>The agent is on its own.</div>
+          </div>
         </div>
         <div class="comparison-card after">
           <div class="label" data-i18n="json_with">With TEKIR</div>
@@ -903,21 +957,21 @@
           <p data-i18n="qs1_desc">Install the /tekir slash command. Invoke it whenever you want TEKIR-compliant endpoints.</p>
           <pre><code>mkdir -p .claude/commands
 curl -o .claude/commands/tekir.md \
-  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/.claude/commands/tekir.md</code></pre>
+  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/.claude/commands/tekir.md</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
         </div>
         <div class="qs-card">
           <div class="qs-badge" data-i18n="qs_always_on">Always on</div>
           <h3 data-i18n="qs2_title">Drop-in Instructions</h3>
           <p data-i18n="qs2_desc">Add TEKIR.md to your project root. Your AI assistant follows it on every interaction.</p>
           <pre><code>curl -o TEKIR.md \
-  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/TEKIR.md</code></pre>
+  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/TEKIR.md</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
         </div>
         <div class="qs-card">
           <div class="qs-badge">Cursor</div>
           <h3 data-i18n="qs3_title">Cursor Rules</h3>
           <p data-i18n="qs3_desc">Drop as .cursorrules for automatic TEKIR compliance in Cursor.</p>
           <pre><code>curl -o .cursorrules \
-  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md</code></pre>
+  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
         </div>
       </div>
     </div>
@@ -1015,77 +1069,78 @@ curl -o .claude/commands/tekir.md \
   <script>
     const translations = {
       tr: {
-        hero_intro: 'TEKIR, HTTP API yanitlarini <strong>yapay zeka ajanlari icin kendi kendini aciklayan</strong> hale getiren acik bir standarttir. Ajanlari tahmin yapmaya zorlayan anlasilmaz durum kodlari yerine, TEKIR ile zenginlestirilmis yanitlar arayana <strong>ne oldugunu</strong>, <strong>neden oldugunu</strong> ve <strong>sirada ne yapilacagini</strong> soyler - hem basarili hem de hatali yanitlarda.',
-        hero_github: "GitHub'da Goruntule",
+        hero_intro: 'TEKIR, HTTP API yan\u0131tlar\u0131n\u0131 <strong>yapay zeka ajanlar\u0131 i\u00e7in kendi kendini a\u00e7\u0131klayan</strong> hale getiren a\u00e7\u0131k bir standartt\u0131r. Ajanlar\u0131 tahmin yapmaya zorlayan anla\u015f\u0131lmaz durum kodlar\u0131 yerine, TEKIR ile zenginle\u015ftirilmi\u015f yan\u0131tlar arayana <strong>ne oldu\u011funu</strong>, <strong>neden oldu\u011funu</strong> ve <strong>s\u0131rada ne yap\u0131laca\u011f\u0131n\u0131</strong> s\u00f6yler - hem ba\u015far\u0131l\u0131 hem de hatal\u0131 yan\u0131tlarda.',
+        hero_github: "GitHub'da G\u00f6r\u00fcnt\u00fcle",
         hero_spec: 'Spesifikasyonu Oku',
         story_title: 'Neden "Tekir"?',
-        story_text: "<em>Tekir</em>, Turkce'de tekir kedi anlamina gelir - Istanbul'un her sokaginda bulunan ikonik melez sokak kedisi. Tekir kediler safkan olarak yetistirilmez. Sokaklar tarafindan sekillenir: dayanikli, kurnaz, genetik olarak cesitli ve nesiller boyu dogal secilimle bilenmis. Bir yetistiriciye veya kullanma kilavuzuna ihtiyaclari yoktur - her seyi kendileri cozerler. TEKIR'in API'ler icin yaptigi tam olarak budur: her yanita kendini aciklayacak sokak zekasi verir, boylece ajanlar tahmin yapmadan ne yapacaklarini bilir.",
-        flow_title: "Bugunku API'ler vs. TEKIR'li API'ler",
-        flow_agent: 'Yapay Zeka Ajani',
-        flow_agent_detail: 'API cagrisi yapar',
+        story_text: "<em>Tekir</em>, T\u00fcrk\u00e7e'de tekir kedi anlam\u0131na gelir - \u0130stanbul'un her soka\u011f\u0131nda bulunan ikonik melez sokak kedisi. Tekir kediler safkan olarak yeti\u015ftirilmez. Sokaklar taraf\u0131ndan \u015fekillenir: dayan\u0131kl\u0131, kurnaz, genetik olarak \u00e7e\u015fitli ve nesiller boyu do\u011fal se\u00e7ilimle bilenmi\u015f. Bir yeti\u015ftiriciye veya kullanma k\u0131lavuzuna ihtiya\u00e7lar\u0131 yoktur - her \u015feyi kendileri \u00e7\u00f6zerler. TEKIR'in API'ler i\u00e7in yapt\u0131\u011f\u0131 tam olarak budur: her yan\u0131ta kendini a\u00e7\u0131klayacak sokak zekas\u0131 verir, b\u00f6ylece ajanlar tahmin yapmadan ne yapacaklar\u0131n\u0131 bilir.",
+        flow_title: "Bug\u00fcnk\u00fc API'ler vs. TEKIR'li API'ler",
+        flow_agent: 'Yapay Zeka Ajan\u0131',
+        flow_agent_detail: 'API \u00e7a\u011fr\u0131s\u0131 yapar',
         flow_api: "API'niz",
-        flow_api_detail: 'Yanit dondurur',
-        flow_whatnow: 'Simdi ne olacak?',
-        flow_whatnow_detail: 'Ajan aksiyon almali',
+        flow_api_detail: 'Yan\u0131t d\u00f6nd\u00fcr\u00fcr',
+        flow_whatnow: '\u015eimdi ne olacak?',
+        flow_whatnow_detail: 'Ajan aksiyon almal\u0131',
         flow_without: "TEKIR'siz",
         flow_with: "TEKIR'le",
-        bad_s1_title: 'API 410 Gone dondurur',
-        bad_s1_desc: 'Baglam yok, yonlendirme yok',
+        bad_s1_title: 'API 410 Gone d\u00f6nd\u00fcr\u00fcr',
+        bad_s1_desc: 'Ba\u011flam yok, y\u00f6nlendirme yok',
         bad_s2_title: 'Ajan "gone" ne demek tahmin eder',
-        bad_s2_desc: 'Silindi mi? Arsivlendi mi? Tasindi mi?',
-        bad_s3_title: 'Ajan bir kurtarma yolu halusinasyonu yapar',
-        bad_s3_desc: 'Rastgele endpoint dener, vazgecer veya coker',
-        good_s1_title: 'API 410 + TEKIR alanlari dondurur',
+        bad_s2_desc: 'Silindi mi? Ar\u015fivlendi mi? Ta\u015f\u0131nd\u0131 m\u0131?',
+        bad_s3_title: 'Ajan bir kurtarma yolu hal\u00fcsinasyonu yapar',
+        bad_s3_desc: 'Rastgele endpoint dener, vazge\u00e7er veya \u00e7\u00f6ker',
+        good_s1_title: 'API 410 + TEKIR alanlar\u0131 d\u00f6nd\u00fcr\u00fcr',
         good_s1_desc: 'reason, next_actions, agent_guidance',
-        good_s2_title: 'Ajan okur: "Konu arsivlendi"',
-        good_s2_desc: 'Neden ve ne mumkun tam olarak bilir',
-        good_s3_title: 'Ajan kullaniciya sorar: "Yeni konu acalim mi?"',
-        good_s3_desc: "next_actions'i takip eder, onay bayragi kontrol eder",
+        good_s2_title: 'Ajan okur: "Konu ar\u015fivlendi"',
+        good_s2_desc: 'Neden ve ne m\u00fcmk\u00fcn tam olarak bilir',
+        good_s3_title: 'Ajan kullan\u0131c\u0131ya sorar: "Yeni konu a\u00e7al\u0131m m\u0131?"',
+        good_s3_desc: "next_actions'\u0131 takip eder, onay bayra\u011f\u0131 kontrol eder",
         json_title: 'JSON, yan yana',
         json_without: "TEKIR'siz",
         json_with: "TEKIR'le",
+        emptiness_msg: "Ba\u015fka bir \u015fey yok. Ba\u011flam yok, rehberlik yok, sonraki ad\u0131m yok.<br>Ajan kendi ba\u015f\u0131na.",
         features_title: 'Neden TEKIR?',
-        feat1_title: 'Yapay zeka ajanlari icin',
-        feat1_desc: "LLM'lerin anlayabilecegi yapilandirilmis metadata - sadece durum kodlari ve tahmin degil.",
-        feat2_title: '200 OK icin de calisir',
-        feat2_desc: 'Sadece hatalar icin degil. Basarili yanitlar da takip eylemleri, rehberlik ve is akisi ipuclari icerebilir.',
-        feat3_title: 'Kurulum gerektirmeyen baslangic',
-        feat3_desc: "TEKIR.md'yi projenize birakin. Yapay zeka kodlama asistani TEKIR uyumlu API'leri otomatik olusturur.",
-        feat4_title: 'Varsayilan olarak guvenli',
-        feat4_desc: 'Yan etkili eylemler etiketlenir. Kullanici onay bayraklari ajanlarin onaysiz hareket etmesini onler.',
-        feat5_title: 'Standart tabanli',
-        feat5_desc: 'RFC 9457 uzerine kuruludur. Geriye uyumlu. Bilinmeyen alanlar mevcut istemciler tarafindan guvende yok sayilir.',
-        feat6_title: 'Framework bagimsiz',
-        feat6_desc: 'Her dil, her framework ile calisir. JSON yanitlariniza alanlari eklemeniz yeterli.',
-        qs_title: 'Saniyeler icinde baslayin',
-        qs_lead: 'Entegrasyon yontinizi secin. Hepsi ayni repodan yonetilir.',
-        qs_recommended: 'Onerilen',
+        feat1_title: 'Yapay zeka ajanlar\u0131 i\u00e7in',
+        feat1_desc: "LLM'lerin anlayabilece\u011fi yap\u0131land\u0131r\u0131lm\u0131\u015f metadata - sadece durum kodlar\u0131 ve tahmin de\u011fil.",
+        feat2_title: '200 OK i\u00e7in de \u00e7al\u0131\u015f\u0131r',
+        feat2_desc: 'Sadece hatalar i\u00e7in de\u011fil. Ba\u015far\u0131l\u0131 yan\u0131tlar da takip eylemleri, rehberlik ve i\u015f ak\u0131\u015f\u0131 ipu\u00e7lar\u0131 i\u00e7erebilir.',
+        feat3_title: 'Kurulum gerektirmeyen ba\u015flang\u0131\u00e7',
+        feat3_desc: "TEKIR.md'yi projenize b\u0131rak\u0131n. Yapay zeka kodlama asistan\u0131 TEKIR uyumlu API'leri otomatik olu\u015fturur.",
+        feat4_title: 'Varsay\u0131lan olarak g\u00fcvenli',
+        feat4_desc: 'Yan etkili eylemler etiketlenir. Kullan\u0131c\u0131 onay bayraklar\u0131 ajanlar\u0131n onays\u0131z hareket etmesini \u00f6nler.',
+        feat5_title: 'Standart tabanl\u0131',
+        feat5_desc: 'RFC 9457 \u00fczerine kuruludur. Geriye uyumlu. Bilinmeyen alanlar mevcut istemciler taraf\u0131ndan g\u00fcvende yok say\u0131l\u0131r.',
+        feat6_title: 'Framework ba\u011f\u0131ms\u0131z',
+        feat6_desc: 'Her dil, her framework ile \u00e7al\u0131\u015f\u0131r. JSON yan\u0131tlar\u0131n\u0131za alanlar\u0131 eklemeniz yeterli.',
+        qs_title: 'Saniyeler i\u00e7inde ba\u015flay\u0131n',
+        qs_lead: 'Entegrasyon y\u00f6nteminizi se\u00e7in. Hepsi ayn\u0131 repodan y\u00f6netilir.',
+        qs_recommended: '\u00d6nerilen',
         qs_always_on: 'Her zaman aktif',
         qs1_title: 'Claude Code Skill',
-        qs1_desc: "/tekir komutunu yukleyin. TEKIR uyumlu endpoint'ler istediginizde cagirin.",
+        qs1_desc: "/tekir komutunu y\u00fckleyin. TEKIR uyumlu endpoint'ler istedi\u011finizde \u00e7a\u011f\u0131r\u0131n.",
         qs2_title: 'Otomatik Talimatlar',
-        qs2_desc: "TEKIR.md'yi projenizin kokune ekleyin. Yapay zeka asistani her etkilesimde bunu takip eder.",
-        qs3_title: 'Cursor Kurallari',
-        qs3_desc: "Cursor'da otomatik TEKIR uyumlulugu icin .cursorrules olarak birakin.",
-        fields_title: 'Eklenti Alanlari',
+        qs2_desc: "TEKIR.md'yi projenizin k\u00f6k\u00fcne ekleyin. Yapay zeka asistan\u0131 her etkile\u015fimde bunu takip eder.",
+        qs3_title: 'Cursor Kurallar\u0131',
+        qs3_desc: "Cursor'da otomatik TEKIR uyumlulu\u011fu i\u00e7in .cursorrules olarak b\u0131rak\u0131n.",
+        fields_title: 'Eklenti Alanlar\u0131',
         th_field: 'Alan',
         th_type: 'Tip',
-        th_purpose: 'Amac',
-        field_reason: 'Yanitin bu sonuca neden sahip oldugu',
-        field_limitations: 'Yaniti etkileyen kisitlamalar',
-        field_next_actions: 'Makine tarafindan uygulanabilir takip adimlari',
-        field_agent_guidance: 'Ajanlar icin dogal dilde talimatlar',
-        field_ucr: 'Ajan once kullaniciya sormali mi?',
-        field_retry: 'Yapilandirilmis yeniden deneme ipuclari',
-        field_links: 'Iliskili kaynaklar (RFC 8288)',
-        fields_note: 'Tum alanlar istege baglidir. Kademeli olarak ekleyin - tek bir <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">next_actions</code> bile fark yaratir.',
-        standards_title: 'Diger standartlarla uyumlu',
-        std_rfc: "TEKIR, Problem Details'i hatalardan tum yanitlara genisletir. Her gecerli RFC 9457 yaniti gecerli bir TEKIR yanitidir.",
-        std_mcp: "MCP arac kesfi ve calistirmayi yonetir. TEKIR geri donenle ilgilenir - yanitla. Birbirini tamamlarlar.",
-        std_openapi: "OpenAPI, API sozlesmesini tasarim zamaninda tanimlar. TEKIR, ajanlarin uzerinde islem yapabilecegi calisma zamani yanit metadatasi saglar.",
-        std_hateoas: "REST kendi kendini tanimlayan API'ler vaat etti. TEKIR sonunda hypermedia kontrollerini pratik hale getiriyor - cunku LLM'ler bunlari gercekten kullanabiliyor.",
-        footer_license: 'TEKIR, MIT Lisansi altinda acik kaynaktir.',
-        footer_company: '<a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a> tarafindan ozenle yapildi - Antalya, Turkiye merkezli kucuk bir sirket.',
+        th_purpose: 'Ama\u00e7',
+        field_reason: 'Yan\u0131t\u0131n bu sonuca neden sahip oldu\u011fu',
+        field_limitations: 'Yan\u0131t\u0131 etkileyen k\u0131s\u0131tlamalar',
+        field_next_actions: 'Makine taraf\u0131ndan uygulanabilir takip ad\u0131mlar\u0131',
+        field_agent_guidance: 'Ajanlar i\u00e7in do\u011fal dilde talimatlar',
+        field_ucr: 'Ajan \u00f6nce kullan\u0131c\u0131ya sormal\u0131 m\u0131?',
+        field_retry: 'Yap\u0131land\u0131r\u0131lm\u0131\u015f yeniden deneme ipu\u00e7lar\u0131',
+        field_links: '\u0130li\u015fkili kaynaklar (RFC 8288)',
+        fields_note: 'T\u00fcm alanlar iste\u011fe ba\u011fl\u0131d\u0131r. Kademeli olarak ekleyin - tek bir <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">next_actions</code> bile fark yarat\u0131r.',
+        standards_title: 'Di\u011fer standartlarla uyumlu',
+        std_rfc: "TEKIR, Problem Details'\u0131 hatalardan t\u00fcm yan\u0131tlara geni\u015fletir. Her ge\u00e7erli RFC 9457 yan\u0131t\u0131 ge\u00e7erli bir TEKIR yan\u0131t\u0131d\u0131r.",
+        std_mcp: "MCP ara\u00e7 ke\u015ffi ve \u00e7al\u0131\u015ft\u0131rmay\u0131 y\u00f6netir. TEKIR geri d\u00f6nenle ilgilenir - yan\u0131tla. Birbirini tamamlarlar.",
+        std_openapi: "OpenAPI, API s\u00f6zle\u015fmesini tasar\u0131m zaman\u0131nda tan\u0131mlar. TEKIR, ajanlar\u0131n \u00fczerinde i\u015flem yapabilece\u011fi \u00e7al\u0131\u015fma zaman\u0131 yan\u0131t metadatas\u0131 sa\u011flar.",
+        std_hateoas: "REST kendi kendini tan\u0131mlayan API'ler vaat etti. TEKIR sonunda hypermedia kontrollerini pratik hale getiriyor - \u00e7\u00fcnk\u00fc LLM'ler bunlar\u0131 ger\u00e7ekten kullanabiliyor.",
+        footer_license: 'TEKIR, MIT Lisans\u0131 alt\u0131nda a\u00e7\u0131k kaynakt\u0131r.',
+        footer_company: '<a href="https://tangelo.com.tr">Tangelo Bili\u015fim Ltd.</a> taraf\u0131ndan \u00f6zenle yap\u0131ld\u0131 - Antalya, T\u00fcrkiye merkezli k\u00fc\u00e7\u00fck bir \u015firket.',
       }
     };
 
@@ -1094,6 +1149,18 @@ curl -o .claude/commands/tekir.md \
     document.querySelectorAll('[data-i18n]').forEach(el => {
       originals[el.getAttribute('data-i18n')] = el.innerHTML;
     });
+
+    function copyCode(btn) {
+      const code = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
 
     function setLang(lang) {
       document.querySelectorAll('.lang-switcher button').forEach(btn => {

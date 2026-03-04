@@ -6,7 +6,7 @@ If you discover a security vulnerability in TEKIR, please report it responsibly.
 
 **Do NOT open a public GitHub issue for security vulnerabilities.**
 
-Instead, email **security@tangelo.dev** with:
+Instead, email **security@tangelo.com.tr** with:
 
 - A description of the vulnerability
 - Steps to reproduce

@@ -36,7 +36,7 @@
   ],
   "retry_policy": {
     "retryable": true,
-    "retry_after": "0",
+    "retry_after": "PT0S",
     "max_attempts": 1
   },
   "agent_guidance": [

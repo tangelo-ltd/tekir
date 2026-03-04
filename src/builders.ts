@@ -54,10 +54,10 @@ export interface LimitationOptions {
  * Options for building a retryable TekirRetryPolicy.
  */
 export interface RetryOptions {
-  retry_after?: number | string;
+  retry_after?: string;
   max_attempts?: number;
-  backoff?: 'linear' | 'exponential';
-  idempotency_key?: string;
+  backoff?: 'fixed' | 'exponential';
+  idempotency_key?: boolean;
 }
 
 /**

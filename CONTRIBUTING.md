@@ -79,4 +79,4 @@ By contributing to TEKIR, you agree that your contributions will be licensed und
 
 ---
 
-TEKIR is maintained by [Tangelo Bilisim Ltd.](https://tangelo.dev) We appreciate every contribution, big or small!
+TEKIR is maintained by [Tangelo Bilisim Ltd.](https://tangelo.com.tr) We appreciate every contribution, big or small!

@@ -259,7 +259,7 @@ const errorResponse = tekir(
     next_actions: [
       action('check_status', 'Check Rate Limit Status', '/rate-limit/status', { effect: 'read' }),
     ],
-    retry_policy: retryable({ retry_after: 34, max_attempts: 3, backoff: 'exponential' }),
+    retry_policy: retryable({ retry_after: 'PT34S', max_attempts: 3, backoff: 'exponential' }),
   }
 );
 ```
