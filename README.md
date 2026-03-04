@@ -32,7 +32,16 @@ Your API returns this when something goes wrong:
 }
 ```
 
-An AI agent sees this and has no idea what to do. It guesses, hallucinates a recovery strategy, or just gives up.
+An AI agent sees this and has no idea what to do. So it starts guessing:
+
+- Retries the same request in a loop, hoping the problem is transient
+- Tries to discover alternative endpoints by modifying the URL
+- Reformats the request body, hoping it was a validation issue
+- Hallucinates a recovery strategy based on training data, not your API
+- Asks the user a vague question like "Something went wrong, what should I do?"
+- Gives up entirely and returns a generic error message
+
+All of these waste tokens, time, and user trust. The information the agent needs *exists* on the server - it's just not in the response.
 
 ## The Solution
 
