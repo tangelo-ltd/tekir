@@ -178,7 +178,7 @@ Each Action object has the following fields:
 |---|---|---|---|---|
 | `id` | string | Yes | - | Stable, unique identifier for this action (e.g., `"track_order"`, `"retry_with_backoff"`) |
 | `title` | string | Yes | - | Short human-readable label for the action |
-| `description` | string | No | - | Longer explanation of what this action does and when to use it |
+| `description` | string | No | - | Rich, LLM-friendly explanation of what this action does, when to use it, what to expect, and operational context (see guidance below) |
 | `href` | string | Yes | - | URL or URL template for the action |
 | `method` | string | No | `"GET"` | HTTP method to use |
 | `headers` | object | No | - | Additional HTTP headers to include in the request |
@@ -197,6 +197,29 @@ The `effect` field is central to TEKIR's safety model:
 
 Agents SHOULD treat actions with `create`, `write`, `delete`, or `external` effects with caution and respect the `user_confirmation_required` flag.
 
+#### Writing effective `description` fields
+
+The `description` field on each action is where TEKIR differentiates itself from plain HATEOAS links. An LLM can reason about natural language - use that. A good `description` should read like a briefing to an intelligent assistant, not a tooltip label.
+
+Include:
+
+- **What the action does and what the response looks like** - not just a label, but operational context
+- **Timing expectations** - "Tracking info appears 1-2 hours after confirmation", "Approval takes 1-2 business days"
+- **Alternative approaches** - "For live updates, register a webhook at /webhooks instead of polling this endpoint"
+- **Failure modes** - "Returns 404 until the warehouse creates a shipment label", "Returns 402 if payment method cannot cover the new total"
+- **Prerequisites and constraints** - "Only available during the 30-minute modification window", "Requires hr-compensation scope"
+- **Side effects and irreversibility** - "This is irreversible", "Releases the payment authorization"
+
+Bad (plain HATEOAS):
+```
+"description": "Track the shipment"
+```
+
+Good (LLM-friendly):
+```
+"description": "Returns real-time shipping status including carrier, tracking number, and estimated delivery date. Tracking info appears 1-2 hours after order confirmation - calling before that returns 404. For live push notifications instead of polling, register a webhook at /v1/webhooks with event type 'shipment.updated'. Status changes typically occur every 2-4 hours."
+```
+
 **Example in a success response (order creation):**
 
 ```json
@@ -213,7 +236,7 @@ Agents SHOULD treat actions with `create`, `write`, `delete`, or `external` effe
     {
       "id": "track_order",
       "title": "Track Order",
-      "description": "Poll this endpoint for real-time order status updates.",
+      "description": "Returns real-time order status including fulfillment stage, carrier info, and estimated delivery. Tracking info appears within 2 hours of order confirmation. For live updates, register a webhook at /webhooks with event 'order.status_changed' instead of polling.",
       "href": "https://api.example.com/orders/ord_8xk2m/tracking",
       "method": "GET",
       "effect": "read"
@@ -221,7 +244,7 @@ Agents SHOULD treat actions with `create`, `write`, `delete`, or `external` effe
     {
       "id": "modify_order",
       "title": "Modify Order",
-      "description": "Change quantity or shipping address. Only available before fulfillment begins.",
+      "description": "Modify item quantities or shipping address for an unprocessed order. Changes are only accepted while the order status is 'confirmed' - once the warehouse begins picking (typically 30-60 minutes after confirmation), this returns 409 Conflict. Changing quantities triggers a price recalculation and may result in a different total. If the new total exceeds the authorized payment amount, returns 402 and the user must re-authorize.",
       "href": "https://api.example.com/orders/ord_8xk2m",
       "method": "PATCH",
       "input_schema": {
@@ -236,7 +259,7 @@ Agents SHOULD treat actions with `create`, `write`, `delete`, or `external` effe
     {
       "id": "cancel_order",
       "title": "Cancel Order",
-      "description": "Cancel the order and initiate a refund. This cannot be undone.",
+      "description": "Cancels the order, releases the payment authorization, and notifies the warehouse to halt processing. This is irreversible - once cancelled, the order cannot be reinstated and must be placed again from scratch. Only available before the order enters 'shipped' status. After shipping, use the returns process at /orders/ord_8xk2m/return instead.",
       "href": "https://api.example.com/orders/ord_8xk2m/cancel",
       "method": "POST",
       "effect": "delete"
@@ -254,23 +277,24 @@ Agents SHOULD treat actions with `create`, `write`, `delete`, or `external` effe
   "title": "Thread Deleted",
   "status": 410,
   "detail": "The conversation thread has been deleted.",
-  "reason": "Thread thr_abc123 was deleted by the owner 2 hours ago. Thread data is not recoverable.",
+  "reason": "Thread thr_abc123 was deleted by the owner 2 hours ago. Thread data is not recoverable. The thread had 47 messages from 3 participants over a 2-week span.",
   "next_actions": [
     {
       "id": "create_new_thread",
       "title": "Create New Thread",
-      "description": "Start a new conversation thread with the same participants.",
+      "description": "Creates a new conversation thread in the same channel with the same participants. Include previous_thread_id in the metadata field to link the new thread to this one - participants will see a 'continued from' banner. The new thread inherits channel defaults (notification settings, retention policy) but starts with zero messages. Participant list can be modified in the request body if desired.",
       "href": "https://api.example.com/threads",
       "method": "POST",
       "body": {
-        "participants": ["user_1", "user_2"]
+        "participants": ["user_1", "user_2"],
+        "metadata": { "previous_thread_id": "thr_abc123" }
       },
       "effect": "create"
     },
     {
       "id": "list_active_threads",
       "title": "List Active Threads",
-      "description": "View all active threads for this user.",
+      "description": "Returns all active (non-deleted, non-archived) threads for the current user, sorted by last activity. Useful for finding an existing thread to continue the conversation instead of creating a new one. Supports filtering by channel_id and participant query parameters. Paginated at 25 threads per page.",
       "href": "https://api.example.com/threads?status=active",
       "method": "GET",
       "effect": "read"
@@ -305,9 +329,9 @@ Use cases include:
     "search_results": [ ... ]
   },
   "agent_guidance": [
-    "Results are sorted by relevance. If the user needs chronological ordering, re-request with sort=created_at.",
-    "This endpoint paginates at 20 results. Use the Link header to fetch additional pages before synthesizing a summary.",
-    "Product prices in results are in the warehouse's local currency. Call /currencies/convert before displaying to the user."
+    "Results are sorted by relevance by default. If the user asks for 'latest' or 'newest', re-request with sort=created_at&order=desc. If they ask for 'cheapest', use sort=price&order=asc. Do not re-sort client-side as the server applies boosting rules that affect ordering.",
+    "This endpoint paginates at 20 results. If the user asks for a comprehensive summary, fetch all pages using the 'next' Link header before synthesizing. For 'find me one that...' queries, scan results page by page and stop as soon as a match is found to avoid unnecessary API calls.",
+    "Product prices in results are in the warehouse's local currency (EUR for EU, USD for US, TRY for TR). Always call /currencies/convert with the user's preferred currency before displaying prices. Do not attempt manual conversion - exchange rates are updated hourly and include applicable taxes."
   ]
 }
 ```
@@ -340,6 +364,7 @@ When `false` or absent, the agent MAY proceed autonomously based on its own poli
     {
       "id": "cancel_subscription",
       "title": "Cancel Subscription",
+      "description": "Cancels the subscription at the end of the current billing period (2026-04-01). The user retains access until then. This is irreversible through the API - reactivation requires contacting support. Any unused credits or add-ons are forfeited. Prorated refunds are not issued for mid-cycle cancellations.",
       "href": "https://api.example.com/subscriptions/sub_xyz/cancel",
       "method": "POST",
       "effect": "external"
@@ -347,6 +372,7 @@ When `false` or absent, the agent MAY proceed autonomously based on its own poli
     {
       "id": "change_plan",
       "title": "Change Plan",
+      "description": "Switches the subscription to a different plan. Upgrades take effect immediately with prorated billing. Downgrades take effect at the next billing cycle to avoid losing access to features mid-period. Changing from 'pro' to 'starter' will disable team collaboration, API access, and priority support. The user should export shared team data before downgrading.",
       "href": "https://api.example.com/subscriptions/sub_xyz/plan",
       "method": "PUT",
       "input_schema": {
@@ -399,6 +425,7 @@ Provides structured retry hints for transient failures. While the HTTP `Retry-Af
     {
       "id": "check_status",
       "title": "Check Service Status",
+      "description": "Returns the current operational status of the payment gateway including health, average latency, and estimated recovery time. This is a public endpoint that does not require authentication. If the status shows 'degraded' or 'down', wait for the estimated recovery time before retrying rather than using the backoff schedule.",
       "href": "https://status.example.com/api/payment-gateway",
       "method": "GET",
       "effect": "read"
@@ -507,6 +534,7 @@ In successful responses, TEKIR fields serve several purposes:
     {
       "id": "track_shipment",
       "title": "Track Shipment",
+      "description": "Returns real-time tracking data from FedEx including current location, scan events, and estimated delivery date. Tracking updates are available within 1 hour of shipment creation. For automated monitoring, register a webhook at /webhooks with event 'shipment.tracking_updated' instead of polling. Standard shipments update every 4-6 hours.",
       "href": "https://api.example.com/shipments/shp_92kd/tracking",
       "method": "GET",
       "effect": "read"
@@ -514,7 +542,7 @@ In successful responses, TEKIR fields serve several purposes:
     {
       "id": "update_shipping_address",
       "title": "Update Shipping Address",
-      "description": "Redirect the shipment to a different address. Only available before carrier pickup.",
+      "description": "Redirects the shipment to a different address. Only available before the carrier picks up the package (carrier pickup happens within 4-6 hours of shipment creation for standard shipping). After pickup, returns 409 Conflict and the user must contact FedEx directly or wait for delivery and use the return process. Address changes to Alaska, Hawaii, or international destinations may incur additional shipping charges.",
       "href": "https://api.example.com/shipments/shp_92kd/address",
       "method": "PUT",
       "input_schema": {
@@ -532,14 +560,17 @@ In successful responses, TEKIR fields serve several purposes:
     {
       "id": "request_return_label",
       "title": "Request Return Label",
+      "description": "Generates a prepaid FedEx return label for this shipment. The label is emailed to the shipping address contact and also available as a PDF download in the response. Return labels are valid for 30 days. Only one active return label per shipment - requesting again while one is active returns the existing label.",
       "href": "https://api.example.com/shipments/shp_92kd/return-label",
       "method": "POST",
       "effect": "create"
     }
   ],
   "agent_guidance": [
-    "The tracking endpoint returns real-time data. Poll no more than once every 30 minutes for standard shipments.",
-    "Address updates are only accepted before the carrier scans the package. Check shipment status before attempting an update."
+    "Note that express shipping was unavailable and standard shipping was applied. Inform the user of this change and the revised estimated delivery date before proceeding with other tasks.",
+    "The tracking endpoint will not return data for approximately 1 hour. If the user asks to track immediately, explain the delay rather than calling the endpoint and getting a 404.",
+    "Address updates are only accepted before carrier pickup (4-6 hours for standard). If the user needs to change the address, prioritize this action over other requests as the window is limited.",
+    "A return label can be requested preemptively if the user expresses uncertainty about the order. This does not affect the shipment - the label simply becomes available if needed."
   ],
   "user_confirmation_required": false,
   "links": [
@@ -585,7 +616,7 @@ The combination is powerful: RFC 9457 tells the caller what went wrong, and TEKI
     {
       "id": "update_payment_method",
       "title": "Update Payment Method",
-      "description": "Add or update a payment method, then retry the charge.",
+      "description": "Replace the expired card with a new payment method. The card_token must be obtained first by tokenizing the card details through the /tokens endpoint (PCI compliance requires client-side tokenization - never send raw card numbers through this API). Setting set_as_default to true ensures future charges use this card. After updating, use retry_payment to complete the original transaction.",
       "href": "https://api.example.com/account/payment-methods",
       "method": "PUT",
       "input_schema": {
@@ -601,7 +632,7 @@ The combination is powerful: RFC 9457 tells the caller what went wrong, and TEKI
     {
       "id": "retry_payment",
       "title": "Retry Payment",
-      "description": "Retry the original payment after updating the payment method.",
+      "description": "Retries the original payment (amount: $142.50) using the current default payment method. This must be called after update_payment_method - retrying with the same expired card will fail again immediately. The retry preserves the original order and pricing. If retry fails, the order remains in 'pending_payment' status for 24 hours before automatic cancellation.",
       "href": "https://api.example.com/payments/pay_7km2/retry",
       "method": "POST",
       "effect": "external"
@@ -609,7 +640,7 @@ The combination is powerful: RFC 9457 tells the caller what went wrong, and TEKI
     {
       "id": "contact_support",
       "title": "Contact Support",
-      "description": "Reach out to support for manual payment processing or account assistance.",
+      "description": "Creates a support ticket for manual payment processing or account-level billing issues. Average response time is 2-4 hours during business hours (UTC 08:00-18:00 Mon-Fri). Use this if the user cannot update their payment method through the API (e.g., wire transfer, purchase order, or corporate billing arrangements).",
       "href": "https://api.example.com/support/tickets",
       "method": "POST",
       "body": {
@@ -620,8 +651,10 @@ The combination is powerful: RFC 9457 tells the caller what went wrong, and TEKI
     }
   ],
   "agent_guidance": [
-    "Do not retry the payment without first updating the payment method. The same card will fail again.",
-    "If the user wants to update their card, you will need to collect the new card details and tokenize them via the /tokens endpoint before calling update_payment_method."
+    "Do not retry the payment without first updating the payment method - the same expired card will fail again immediately. The correct sequence is: collect new card details from user, tokenize via /tokens, call update_payment_method, then retry_payment.",
+    "If the user wants to update their card, explain that you need their new card number, expiry, and CVV. These are tokenized client-side for PCI compliance and never stored in plaintext.",
+    "The order is held in 'pending_payment' status for 24 hours. After that, it is automatically cancelled and the user must place a new order. Communicate this urgency if appropriate.",
+    "If the user mentions corporate billing, purchase orders, or wire transfer, direct them to contact_support as these payment methods cannot be processed through the API."
   ],
   "user_confirmation_required": true,
   "retry_policy": {
