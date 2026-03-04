@@ -21,7 +21,7 @@
 
 ---
 
-<h3 align="center"><em>Your AI agents are burning tokens, retrying blindly, and hallucinating recovery strategies - all because your API won't tell them what to do next.</em></h3>
+<h3 align="center"><em>AI agents are burning tokens, retrying blindly, and hallucinating recovery strategies - make your API actively help them out.</em></h3>
 
 ---
 
