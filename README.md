@@ -153,7 +153,18 @@ See the [full specification](./spec/tekir-v0.1.md) for detailed field definition
 
 ## Quick Start
 
-### Option 1: Drop-in AI Instructions (zero install)
+### Option 1: Claude Code Slash Command
+
+Install the `/tekir` command - invoke it whenever you want Claude to build TEKIR-compliant endpoints.
+
+```bash
+mkdir -p .claude/commands
+curl -o .claude/commands/tekir.md https://raw.githubusercontent.com/tangelo-ltd/tekir/main/.claude/commands/tekir.md
+```
+
+Then in Claude Code, type `/tekir` before asking it to build an API endpoint.
+
+### Option 2: Drop-in AI Instructions (zero install)
 
 Copy [`TEKIR.md`](./TEKIR.md) into your project root or `.claude/` folder. Your AI coding assistant will automatically build TEKIR-compliant responses.
 
@@ -167,7 +178,7 @@ curl -o .cursorrules https://raw.githubusercontent.com/tangelo-ltd/tekir/main/pr
 
 That's it. Next time you ask Claude or Cursor to build an API endpoint, it will include TEKIR fields automatically.
 
-### Option 2: TypeScript Package
+### Option 3: TypeScript Package
 
 ```bash
 npm install tekir
@@ -202,7 +213,7 @@ const response = tekir(
 );
 ```
 
-### Option 3: Express / Fastify Middleware
+### Option 4: Express / Fastify Middleware
 
 ```typescript
 // Express

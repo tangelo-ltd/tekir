@@ -715,18 +715,30 @@
           <pre><code>{
   "status": 410,
   "title": "Thread is gone",
-  "reason": "Archived threads are not writable.",
+
+  "reason": "Threads are archived after 90 days
+  of inactivity. Messages are still accessible
+  but no new messages can be posted.",
 
   "next_actions": [{
     "id": "create_thread",
     "title": "Create a new thread",
+    "description": "Creates a new thread in the
+      same channel. Include previous_thread_id
+      in metadata to link the threads and
+      preserve conversation history.",
     "href": "/v1/threads",
     "method": "POST",
     "effect": "create"
   }],
 
   "agent_guidance": [
-    "Ask the user if they want a new thread."
+    "Explain to the user that the thread was
+     archived and their message was not sent.",
+    "Ask whether they want to start a new
+     thread - do not create one automatically.",
+    "If they just need old messages, use
+     GET /v1/threads/thr_123/messages instead."
   ],
 
   "user_confirmation_required": true,
@@ -780,11 +792,15 @@
   <section class="quickstart">
     <div class="container">
       <h2>Get started in seconds</h2>
-      <p class="lead">Drop one file into your project. Your AI assistant does the rest.</p>
-      <pre><code># For Claude Code / Claude - drop into your project root or .claude/ folder
+      <p class="lead">Pick your integration style. All maintained in the same repo.</p>
+      <pre><code># Option 1: Claude Code slash command - type /tekir to activate
+mkdir -p .claude/commands
+curl -o .claude/commands/tekir.md https://raw.githubusercontent.com/tangelo-ltd/tekir/main/.claude/commands/tekir.md
+
+# Option 2: Drop-in instructions - always active in your project
 curl -o TEKIR.md https://raw.githubusercontent.com/tangelo-ltd/tekir/main/TEKIR.md
 
-# For Cursor - drop as .cursorrules
+# Option 3: Cursor rules
 curl -o .cursorrules https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md
 
 # That's it. Your AI assistant now builds TEKIR-compliant APIs automatically.</code></pre>
