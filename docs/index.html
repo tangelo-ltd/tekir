@@ -393,6 +393,7 @@
       display: flex;
       flex-direction: column;
       min-height: 420px;
+      height: 100%;
     }
 
     .comparison-card.before pre {
@@ -953,11 +954,9 @@
       <div class="quickstart-cards">
         <div class="qs-card">
           <div class="qs-badge" data-i18n="qs_recommended">Recommended</div>
-          <h3 data-i18n="qs1_title">Claude Code Skill</h3>
-          <p data-i18n="qs1_desc">Install the /tekir slash command. Invoke it whenever you want TEKIR-compliant endpoints.</p>
-          <pre><code>mkdir -p .claude/commands
-curl -o .claude/commands/tekir.md \
-  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/.claude/commands/tekir.md</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+          <h3 data-i18n="qs1_title">Claude Code Plugin</h3>
+          <p data-i18n="qs1_desc">Install as a plugin. Gives you the /tekir skill inside Claude Code.</p>
+          <pre><code>/plugin install tangelo-ltd/tekir</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
         </div>
         <div class="qs-card">
           <div class="qs-badge" data-i18n="qs_always_on">Always on</div>
@@ -1116,8 +1115,8 @@ curl -o .claude/commands/tekir.md \
         qs_lead: 'Entegrasyon y\u00f6nteminizi se\u00e7in. Hepsi ayn\u0131 repodan y\u00f6netilir.',
         qs_recommended: '\u00d6nerilen',
         qs_always_on: 'Her zaman aktif',
-        qs1_title: 'Claude Code Skill',
-        qs1_desc: "/tekir komutunu y\u00fckleyin. TEKIR uyumlu endpoint'ler istedi\u011finizde \u00e7a\u011f\u0131r\u0131n.",
+        qs1_title: 'Claude Code Eklentisi',
+        qs1_desc: "Eklenti olarak y\u00fckleyin. Claude Code i\u00e7inde /tekir komutunu kullan\u0131n.",
         qs2_title: 'Otomatik Talimatlar',
         qs2_desc: "TEKIR.md'yi projenizin k\u00f6k\u00fcne ekleyin. Yapay zeka asistan\u0131 her etkile\u015fimde bunu takip eder.",
         qs3_title: 'Cursor Kurallar\u0131',

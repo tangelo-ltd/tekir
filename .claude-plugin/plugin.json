@@ -3,6 +3,5 @@
   "description": "TEKIR - Transparent Endpoint Knowledge for Intelligent Reasoning. Build API responses that are self-explaining for AI agents.",
   "version": "0.1.0",
   "author": "Tangelo Bilisim Ltd.",
-  "homepage": "https://github.com/tangelo-ltd/tekir",
-  "skills": ["tekir"]
+  "homepage": "https://github.com/tangelo-ltd/tekir"
 }

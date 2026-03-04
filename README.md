@@ -154,16 +154,15 @@ See the [full specification](./spec/tekir-v0.1.md) for detailed field definition
 
 ## Quick Start
 
-### Option 1: Claude Code Slash Command
+### Option 1: Claude Code Plugin
 
-Install the `/tekir` command - invoke it whenever you want Claude to build TEKIR-compliant endpoints.
+Install as a Claude Code plugin - gives you the `/tekir` skill.
 
 ```bash
-mkdir -p .claude/commands
-curl -o .claude/commands/tekir.md https://raw.githubusercontent.com/tangelo-ltd/tekir/main/.claude/commands/tekir.md
+/plugin install tangelo-ltd/tekir
 ```
 
-Then in Claude Code, type `/tekir` before asking it to build an API endpoint.
+Then type `/tekir` before asking Claude to build an API endpoint.
 
 ### Option 2: Drop-in AI Instructions (zero install)
 
