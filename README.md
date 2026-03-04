@@ -9,7 +9,7 @@
 <h1 align="center">TEKIR</h1>
 
 <p align="center">
-  <strong>Transparent Endpoint Knowledge for Intelligent Reasoning</strong><br>
+  <strong><u>T</u>ransparent <u>E</u>ndpoint <u>K</u>nowledge for <u>I</u>ntelligent <u>R</u>easoning</strong><br>
   <em>Make your API responses self-explaining for AI agents.</em>
 </p>
 
