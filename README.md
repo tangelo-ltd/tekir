@@ -307,5 +307,5 @@ Spec proposals should be opened as GitHub Issues with the `[Proposal]` tag.
 ---
 
 <p align="center">
-  <em>Built with care by <a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a></em>
+  <em>Built with care by <a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a> - a small company based in Antalya, Turkey.</em>
 </p>
