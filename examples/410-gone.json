@@ -1,0 +1,45 @@
+{
+  "type": "https://api.example.com/problems/thread-gone",
+  "title": "Thread is gone",
+  "status": 410,
+  "detail": "This thread can no longer accept new messages.",
+  "reason": "Threads in state=archived are not writable.",
+  "limitations": [
+    {
+      "code": "thread_archived",
+      "detail": "The thread was archived by the user or system policy.",
+      "target": "/thread_id"
+    }
+  ],
+  "user_confirmation_required": true,
+  "next_actions": [
+    {
+      "id": "create_thread",
+      "title": "Create a new thread",
+      "description": "Create a new thread if the user wants to continue the conversation.",
+      "href": "https://api.example.com/v1/threads",
+      "method": "POST",
+      "effect": "create",
+      "body": {
+        "topic": "Continuation of previous thread",
+        "metadata": {
+          "previous_thread_id": "thr_123"
+        }
+      }
+    }
+  ],
+  "retry_policy": {
+    "retryable": false
+  },
+  "agent_guidance": [
+    "Ask the user whether they want to continue in a new thread.",
+    "If confirmed, create a new thread and include the previous_thread_id for traceability."
+  ],
+  "links": [
+    {
+      "rel": "help",
+      "href": "https://api.example.com/docs/threads#archival",
+      "title": "Thread archival policy"
+    }
+  ]
+}

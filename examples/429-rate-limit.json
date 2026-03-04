@@ -1,0 +1,32 @@
+{
+  "type": "https://api.example.com/problems/rate-limited",
+  "title": "Rate limit exceeded",
+  "status": 429,
+  "detail": "Too many requests within the current window.",
+  "reason": "The request exceeded the user-level quota.",
+  "limitations": [
+    {
+      "code": "quota_window_exceeded",
+      "detail": "Try again after the reset."
+    }
+  ],
+  "retry_policy": {
+    "retryable": true,
+    "retry_after": "30",
+    "max_attempts": 5,
+    "backoff": "exponential",
+    "idempotency_key": true
+  },
+  "user_confirmation_required": false,
+  "agent_guidance": [
+    "Do not retry in a tight loop.",
+    "Prefer respecting Retry-After and RateLimit headers when present."
+  ],
+  "links": [
+    {
+      "rel": "help",
+      "href": "https://api.example.com/docs/rate-limits",
+      "title": "Rate limit documentation"
+    }
+  ]
+}

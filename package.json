@@ -1,0 +1,47 @@
+{
+  "name": "tekir",
+  "version": "0.1.0",
+  "description": "Transparent Endpoint Knowledge for Intelligent Reasoning - Make your API responses self-explaining for AI agents",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./express": {
+      "types": "./dist/middleware/express.d.ts",
+      "import": "./dist/middleware/express.js"
+    },
+    "./fastify": {
+      "types": "./dist/middleware/fastify.d.ts",
+      "import": "./dist/middleware/fastify.js"
+    }
+  },
+  "files": ["dist", "schema"],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test src/**/*.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["api", "rest", "ai", "agent", "llm", "rfc9457", "problem-details", "self-explaining", "tekir", "hateoas"],
+  "author": "Tangelo Bilisim Ltd.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tangelo-ltd/tekir"
+  },
+  "homepage": "https://github.com/tangelo-ltd/tekir",
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "peerDependencies": {
+    "express": ">=4.0.0",
+    "fastify": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "express": { "optional": true },
+    "fastify": { "optional": true }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "type": "https://api.example.com/problems/redacted-by-policy",
+  "title": "Response restricted by policy",
+  "status": 403,
+  "detail": "The requested data cannot be provided under the current policy constraints.",
+  "reason": "Sensitive fields require additional user-provided justification or narrower scope.",
+  "limitations": [
+    {
+      "code": "policy_redaction",
+      "detail": "One or more requested fields are restricted.",
+      "target": "/requested_fields/0"
+    },
+    {
+      "code": "insufficient_justification",
+      "detail": "The request did not include a user-approved business justification."
+    }
+  ],
+  "user_confirmation_required": true,
+  "next_actions": [
+    {
+      "id": "narrow_request",
+      "title": "Request a narrower field set",
+      "description": "Retry with fewer (non-restricted) fields.",
+      "href": "https://api.example.com/v1/reports?fields=non_sensitive_subset",
+      "method": "GET",
+      "effect": "read"
+    },
+    {
+      "id": "submit_justification",
+      "title": "Submit user-approved justification",
+      "description": "Only proceed if the user explicitly confirms the justification text.",
+      "href": "https://api.example.com/v1/policy/justifications",
+      "method": "POST",
+      "effect": "write",
+      "body": {
+        "purpose": "",
+        "requested_scope": ""
+      }
+    }
+  ],
+  "retry_policy": {
+    "retryable": false
+  },
+  "agent_guidance": [
+    "Ask the user for a business justification only if the user intends to proceed.",
+    "If the user declines, prefer narrowing the request to non-restricted fields."
+  ]
+}

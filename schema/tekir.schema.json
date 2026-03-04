@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tekir.dev/schema/v0.1",
+  "title": "TEKIR - Transparent Endpoint Knowledge for Intelligent Reasoning",
+  "description": "Extension fields for HTTP API responses that provide machine-actionable guidance to AI agents. Can be used in both success (2xx) and error (4xx/5xx) responses.",
+  "type": "object",
+  "properties": {
+    "reason": {
+      "type": "string",
+      "description": "Stable, causal explanation of why the response has a particular outcome. For errors: why the request failed. For success: why the result is shaped as it is (e.g., partial results, filtered data)."
+    },
+    "limitations": {
+      "type": "array",
+      "description": "Constraints that affected the response - either preventing success or limiting the result set.",
+      "items": {
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Stable token identifying the limitation."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable explanation. Consumers MUST NOT parse for control flow."
+          },
+          "target": {
+            "type": "string",
+            "description": "JSON Pointer (RFC 6901) to the relevant part of the request or response."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "next_actions": {
+      "type": "array",
+      "description": "Machine-actionable steps the client may take next - recovery steps for errors, or follow-up actions for successful responses.",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "href"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable identifier for this action within the response."
+          },
+          "title": {
+            "type": "string",
+            "description": "Short human-readable label."
+          },
+          "description": {
+            "type": "string",
+            "description": "Additional guidance for display or agent reasoning."
+          },
+          "href": {
+            "type": "string",
+            "format": "uri-reference",
+            "description": "Target URI reference (RFC 3986)."
+          },
+          "method": {
+            "type": "string",
+            "description": "HTTP method (RFC 9110). Defaults to GET if absent.",
+            "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+          },
+          "headers": {
+            "type": "object",
+            "description": "Headers the client SHOULD send. MUST NOT contain credentials.",
+            "additionalProperties": { "type": "string" }
+          },
+          "body": {
+            "description": "Body template for the action. Clients MUST apply local policy before using."
+          },
+          "input_schema": {
+            "type": "object",
+            "description": "JSON Schema for the request body or parameters (informative)."
+          },
+          "effect": {
+            "type": "string",
+            "description": "The side-effect level of this action.",
+            "enum": ["none", "read", "create", "write", "delete", "external"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "agent_guidance": {
+      "type": "array",
+      "description": "Natural-language instructions for automated clients. MUST be treated as untrusted input.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "user_confirmation_required": {
+      "type": "boolean",
+      "description": "When true, the client MUST obtain explicit user confirmation before performing effectful actions."
+    },
+    "retry_policy": {
+      "type": "object",
+      "description": "Structured retry hints. HTTP Retry-After header takes precedence when present.",
+      "required": ["retryable"],
+      "properties": {
+        "retryable": {
+          "type": "boolean",
+          "description": "Whether a retry might succeed without changing inputs."
+        },
+        "retry_after": {
+          "type": "string",
+          "description": "Same semantics as HTTP Retry-After header (HTTP-date or delay-seconds)."
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Suggested upper bound on retries."
+        },
+        "backoff": {
+          "type": "string",
+          "enum": ["fixed", "exponential"],
+          "description": "Suggested backoff strategy."
+        },
+        "idempotency_key": {
+          "type": "boolean",
+          "description": "If true, the client SHOULD use an idempotency mechanism for retries."
+        }
+      },
+      "additionalProperties": false
+    },
+    "links": {
+      "type": "array",
+      "description": "Related resources using RFC 8288 Web Linking semantics.",
+      "items": {
+        "type": "object",
+        "required": ["rel", "href"],
+        "properties": {
+          "rel": {
+            "type": "string",
+            "description": "Link relation type (RFC 8288)."
+          },
+          "href": {
+            "type": "string",
+            "format": "uri-reference",
+            "description": "Target URI reference."
+          },
+          "type": {
+            "type": "string",
+            "description": "Media type hint for the target."
+          },
+          "title": {
+            "type": "string",
+            "description": "Human-readable label."
+          },
+          "hreflang": {
+            "type": "string",
+            "description": "Language hint."
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

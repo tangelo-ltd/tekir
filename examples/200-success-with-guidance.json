@@ -1,0 +1,65 @@
+{
+  "id": "order_789",
+  "status": "confirmed",
+  "total": 149.99,
+  "currency": "USD",
+  "created_at": "2026-03-04T10:30:00Z",
+
+  "next_actions": [
+    {
+      "id": "track_shipment",
+      "title": "Track shipment",
+      "description": "View real-time shipping status and estimated delivery date.",
+      "href": "https://api.example.com/v1/orders/order_789/tracking",
+      "method": "GET",
+      "effect": "read"
+    },
+    {
+      "id": "add_items",
+      "title": "Add items to order",
+      "description": "The order can be modified for the next 30 minutes before processing begins.",
+      "href": "https://api.example.com/v1/orders/order_789/items",
+      "method": "POST",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": ["product_id", "quantity"],
+        "properties": {
+          "product_id": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    {
+      "id": "cancel_order",
+      "title": "Cancel order",
+      "description": "Cancel the order for a full refund. Only available before processing starts.",
+      "href": "https://api.example.com/v1/orders/order_789",
+      "method": "DELETE",
+      "effect": "delete"
+    }
+  ],
+  "limitations": [
+    {
+      "code": "modification_window",
+      "detail": "Order can only be modified within 30 minutes of creation."
+    }
+  ],
+  "agent_guidance": [
+    "Confirm with the user that the order looks correct.",
+    "If the user wants to track the shipment, use the track_shipment action.",
+    "The modification window closes at 2026-03-04T11:00:00Z."
+  ],
+  "user_confirmation_required": true,
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://api.example.com/v1/orders/order_789"
+    },
+    {
+      "rel": "help",
+      "href": "https://api.example.com/docs/orders",
+      "title": "Orders API documentation"
+    }
+  ]
+}

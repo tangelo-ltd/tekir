@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" role="img" aria-label="TEKIR - Transparent Endpoint Knowledge for Intelligent Reasoning">
+  <defs>
+    <style>
+      .body { fill: #D4956A; }
+      .stripe { fill: #A0673E; }
+      .inner-ear { fill: #F0B8A0; }
+      .eye-white { fill: #FFFFFF; }
+      .eye-iris { fill: #4A90D9; }
+      .eye-pupil { fill: #1A1A2E; }
+      .eye-shine { fill: #FFFFFF; }
+      .nose { fill: #E87B7B; }
+      .mouth { fill: none; stroke: #A0673E; stroke-width: 1.5; stroke-linecap: round; }
+      .whisker { fill: none; stroke: #A0673E; stroke-width: 1; stroke-linecap: round; }
+      .title { fill: #2D3748; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800; }
+      .subtitle { fill: #718096; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 400; }
+    </style>
+  </defs>
+
+  <!-- Cat (scaled down, positioned left) -->
+  <g transform="translate(30, 10) scale(0.85)">
+    <!-- Tail -->
+    <path d="M 153 157 Q 183 132 174 102 Q 169 88 161 92" fill="#D4956A"/>
+
+    <!-- Body -->
+    <ellipse cx="100" cy="155" rx="55" ry="40" class="body"/>
+
+    <!-- Body stripes -->
+    <path d="M 75 135 Q 80 130 85 135" class="stripe" opacity="0.4"/>
+    <path d="M 95 132 Q 100 127 105 132" class="stripe" opacity="0.4"/>
+    <path d="M 115 135 Q 120 130 125 135" class="stripe" opacity="0.4"/>
+
+    <!-- Front paws -->
+    <ellipse cx="75" cy="185" rx="18" ry="10" class="body"/>
+    <ellipse cx="125" cy="185" rx="18" ry="10" class="body"/>
+
+    <!-- Head -->
+    <ellipse cx="100" cy="95" rx="48" ry="42" class="body"/>
+
+    <!-- Left ear -->
+    <polygon points="60,70 52,25 82,55" class="body"/>
+    <polygon points="63,65 57,33 78,57" class="inner-ear"/>
+
+    <!-- Right ear -->
+    <polygon points="140,70 148,25 118,55" class="body"/>
+    <polygon points="137,65 143,33 122,57" class="inner-ear"/>
+
+    <!-- Forehead stripes -->
+    <path d="M 90 60 L 88 50" class="stripe" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M 100 58 L 100 48" class="stripe" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M 110 60 L 112 50" class="stripe" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+    <!-- Left eye -->
+    <ellipse cx="78" cy="88" rx="16" ry="18" class="eye-white"/>
+    <ellipse cx="80" cy="90" rx="11" ry="13" class="eye-iris"/>
+    <ellipse cx="80" cy="90" rx="6" ry="8" class="eye-pupil"/>
+    <ellipse cx="76" cy="84" rx="4" ry="5" class="eye-shine" opacity="0.9"/>
+    <ellipse cx="84" cy="93" rx="2" ry="2.5" class="eye-shine" opacity="0.5"/>
+
+    <!-- Right eye -->
+    <ellipse cx="122" cy="88" rx="16" ry="18" class="eye-white"/>
+    <ellipse cx="120" cy="90" rx="11" ry="13" class="eye-iris"/>
+    <ellipse cx="120" cy="90" rx="6" ry="8" class="eye-pupil"/>
+    <ellipse cx="116" cy="84" rx="4" ry="5" class="eye-shine" opacity="0.9"/>
+    <ellipse cx="124" cy="93" rx="2" ry="2.5" class="eye-shine" opacity="0.5"/>
+
+    <!-- Nose -->
+    <path d="M 96 104 L 100 109 L 104 104 Z" class="nose"/>
+
+    <!-- Mouth -->
+    <path d="M 100 109 L 100 114" class="mouth"/>
+    <path d="M 100 114 Q 92 120 87 117" class="mouth"/>
+    <path d="M 100 114 Q 108 120 113 117" class="mouth"/>
+
+    <!-- Whiskers -->
+    <path d="M 85 108 Q 60 103 42 98" class="whisker"/>
+    <path d="M 84 112 Q 58 112 40 110" class="whisker"/>
+    <path d="M 85 116 Q 60 120 42 122" class="whisker"/>
+    <path d="M 115 108 Q 140 103 158 98" class="whisker"/>
+    <path d="M 116 112 Q 142 112 160 110" class="whisker"/>
+    <path d="M 115 116 Q 140 120 158 122" class="whisker"/>
+
+    <!-- Cheek blush -->
+    <ellipse cx="65" cy="105" rx="8" ry="5" fill="#F0A0A0" opacity="0.3"/>
+    <ellipse cx="135" cy="105" rx="8" ry="5" fill="#F0A0A0" opacity="0.3"/>
+  </g>
+
+  <!-- Text -->
+  <text x="280" y="95" class="title" font-size="72">TEKIR</text>
+  <text x="280" y="130" class="subtitle" font-size="18">Transparent Endpoint Knowledge for Intelligent Reasoning</text>
+  <text x="280" y="158" class="subtitle" font-size="14" opacity="0.7">Make your API responses self-explaining for AI agents</text>
+</svg>

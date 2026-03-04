@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEKIR - Transparent Endpoint Knowledge for Intelligent Reasoning</title>
+  <meta name="description" content="Make your API responses self-explaining for AI agents. A lightweight standard for structured, machine-actionable HTTP response metadata.">
+  <meta property="og:title" content="TEKIR - Self-explaining API responses for AI agents">
+  <meta property="og:description" content="A lightweight standard for structured, machine-actionable HTTP response metadata. Works with any framework, any language.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tangelo-ltd.github.io/tekir/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TEKIR - Self-explaining APIs for AI agents">
+  <meta name="twitter:description" content="Make your API responses self-explaining for AI agents. Drop in TEKIR.md and go.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
+  <style>
+    :root {
+      --amber: #D4956A;
+      --amber-dark: #A0673E;
+      --blue: #4A90D9;
+      --bg: #FAFAF9;
+      --text: #1A1A2E;
+      --text-muted: #64748B;
+      --card-bg: #FFFFFF;
+      --card-border: #E2E8F0;
+      --code-bg: #1E293B;
+      --code-text: #E2E8F0;
+      --green: #22C55E;
+      --red: #EF4444;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0F172A;
+        --text: #F1F5F9;
+        --text-muted: #94A3B8;
+        --card-bg: #1E293B;
+        --card-border: #334155;
+        --code-bg: #0D1117;
+      }
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+
+    .hero-logo {
+      width: 140px;
+      height: 140px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .hero .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .hero .tagline {
+      font-size: 1.25rem;
+      color: var(--amber-dark);
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .btn-primary {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+    }
+
+    /* Comparison */
+    .comparison {
+      padding: 60px 0;
+    }
+
+    .comparison h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 700px) {
+      .comparison-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.2rem; }
+    }
+
+    .comparison-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+
+    .comparison-card .label {
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .comparison-card.before .label {
+      background: var(--red);
+      color: white;
+    }
+
+    .comparison-card.after .label {
+      background: var(--green);
+      color: white;
+    }
+
+    .comparison-card pre {
+      margin: 0;
+      padding: 20px;
+      background: var(--code-bg);
+      color: var(--code-text);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    /* Features */
+    .features {
+      padding: 60px 0;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .feature-card .icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Quick Start */
+    .quickstart {
+      padding: 60px 0;
+    }
+
+    .quickstart h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .quickstart .lead {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+
+    .quickstart-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .tab.active {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-color: var(--code-bg);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .quickstart pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 24px;
+      border-radius: 0 12px 12px 12px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    /* Fields Table */
+    .fields {
+      padding: 60px 0;
+    }
+
+    .fields h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+
+    .fields-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+
+    .fields-table th {
+      text-align: left;
+      padding: 14px 20px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .fields-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.9rem;
+    }
+
+    .fields-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .fields-table code {
+      background: var(--code-bg);
+      color: var(--amber);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    /* Standards */
+    .standards {
+      padding: 60px 0;
+    }
+
+    .standards h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+
+    .standards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .standards-grid { grid-template-columns: 1fr; }
+    }
+
+    .standard-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .standard-card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: var(--blue);
+    }
+
+    .standard-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+    }
+
+    footer a {
+      color: var(--amber-dark);
+      text-decoration: none;
+    }
+
+    .copy-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <img src="../assets/tekir-logo.svg" alt="TEKIR cat logo" class="hero-logo">
+      <h1>TEKIR</h1>
+      <p class="subtitle">Transparent Endpoint Knowledge for Intelligent Reasoning</p>
+      <p class="tagline">Make your API responses self-explaining for AI agents.</p>
+      <div class="hero-buttons">
+        <a href="https://github.com/tangelo-ltd/tekir" class="btn btn-primary">
+          View on GitHub
+        </a>
+        <a href="https://github.com/tangelo-ltd/tekir/blob/main/spec/tekir-v0.1.md" class="btn btn-secondary">
+          Read the Spec
+        </a>
+        <a href="https://www.npmjs.com/package/tekir" class="btn btn-secondary">
+          npm install tekir
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Before/After Comparison -->
+  <section class="comparison">
+    <div class="container">
+      <h2>APIs today vs. APIs with TEKIR</h2>
+      <div class="comparison-grid">
+        <div class="comparison-card before">
+          <div class="label">Without TEKIR</div>
+          <pre><code>{
+  "status": 410,
+  "message": "Gone"
+}
+
+// Agent: "...what do I do now?"</code></pre>
+        </div>
+        <div class="comparison-card after">
+          <div class="label">With TEKIR</div>
+          <pre><code>{
+  "status": 410,
+  "title": "Thread is gone",
+  "reason": "Archived threads are not writable.",
+
+  "next_actions": [{
+    "id": "create_thread",
+    "title": "Create a new thread",
+    "href": "/v1/threads",
+    "method": "POST",
+    "effect": "create"
+  }],
+
+  "agent_guidance": [
+    "Ask the user if they want a new thread."
+  ],
+
+  "user_confirmation_required": true,
+  "retry_policy": { "retryable": false }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <h2>Why TEKIR?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="icon">🤖</div>
+          <h3>Built for AI agents</h3>
+          <p>Structured metadata that LLMs can reason about - not just status codes and guesswork.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">✅</div>
+          <h3>Works on 200 OK too</h3>
+          <p>Not just errors. Success responses can include follow-up actions, guidance, and workflow hints.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔌</div>
+          <h3>10-minute integration</h3>
+          <p>Drop in TEKIR.md for instant AI assistant support, or install the npm package for helpers.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔒</div>
+          <h3>Safe by default</h3>
+          <p>Effectful actions are tagged. User confirmation flags prevent agents from acting without approval.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📐</div>
+          <h3>Standards-based</h3>
+          <p>Extends RFC 9457. Backwards compatible. Unknown fields are safely ignored by existing clients.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🌍</div>
+          <h3>Framework agnostic</h3>
+          <p>Works with any language, any framework. Express and Fastify middleware included for convenience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="quickstart">
+    <div class="container">
+      <h2>Get started in seconds</h2>
+      <p class="lead">Choose your path - zero install or full package.</p>
+
+      <div class="quickstart-tabs">
+        <div class="tab active" onclick="showTab('drop-in')">Drop-in (zero install)</div>
+        <div class="tab" onclick="showTab('npm')">npm package</div>
+        <div class="tab" onclick="showTab('middleware')">Express middleware</div>
+      </div>
+
+      <div id="tab-drop-in" class="tab-content active">
+        <pre><code># For Claude Code / Claude
+curl -o TEKIR.md https://raw.githubusercontent.com/tangelo-ltd/tekir/main/TEKIR.md
+
+# For Cursor
+curl -o .cursorrules https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md
+
+# That's it. Your AI assistant now builds TEKIR-compliant APIs automatically.</code></pre>
+      </div>
+
+      <div id="tab-npm" class="tab-content">
+        <pre><code>npm install tekir</code></pre>
+        <pre style="margin-top: 12px"><code>import { tekir, action, guidance } from 'tekir';
+
+const response = tekir(
+  { id: 'order_123', status: 'confirmed', total: 149.99 },
+  {
+    next_actions: [
+      action('track', 'Track shipment', '/orders/order_123/tracking', {
+        effect: 'read',
+      }),
+    ],
+    agent_guidance: guidance('Confirm the order with the user.'),
+    user_confirmation_required: true,
+  }
+);</code></pre>
+      </div>
+
+      <div id="tab-middleware" class="tab-content">
+        <pre><code>import express from 'express';
+import { tekirExpress } from 'tekir/express';
+import { action } from 'tekir';
+
+const app = express();
+app.use(tekirExpress());
+
+app.post('/orders', (req, res) => {
+  const order = { id: 'order_123', status: 'confirmed' };
+
+  res.tekir({
+    next_actions: [
+      action('track', 'Track shipment', `/orders/${order.id}/tracking`, {
+        effect: 'read',
+      }),
+    ],
+  });
+
+  res.status(201).json(order);
+  // TEKIR fields are merged automatically
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Extension Fields -->
+  <section class="fields">
+    <div class="container">
+      <h2>Extension Fields</h2>
+      <table class="fields-table">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>reason</code></td>
+            <td>string</td>
+            <td>Why the response has this outcome</td>
+          </tr>
+          <tr>
+            <td><code>limitations</code></td>
+            <td>array</td>
+            <td>Constraints that affected the response</td>
+          </tr>
+          <tr>
+            <td><code>next_actions</code></td>
+            <td>array</td>
+            <td>Machine-actionable follow-up steps</td>
+          </tr>
+          <tr>
+            <td><code>agent_guidance</code></td>
+            <td>array</td>
+            <td>Natural-language instructions for agents</td>
+          </tr>
+          <tr>
+            <td><code>user_confirmation_required</code></td>
+            <td>boolean</td>
+            <td>Must the agent ask the user first?</td>
+          </tr>
+          <tr>
+            <td><code>retry_policy</code></td>
+            <td>object</td>
+            <td>Structured retry hints</td>
+          </tr>
+          <tr>
+            <td><code>links</code></td>
+            <td>array</td>
+            <td>Related resources (RFC 8288)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="text-align: center; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">
+        All fields are optional. Add them incrementally - even one <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">next_actions</code> makes a difference.
+      </p>
+    </div>
+  </section>
+
+  <!-- Complementary Standards -->
+  <section class="standards">
+    <div class="container">
+      <h2>Plays well with others</h2>
+      <div class="standards-grid">
+        <div class="standard-card">
+          <h3>RFC 9457</h3>
+          <p>TEKIR extends Problem Details beyond errors to all responses. Every valid RFC 9457 response is a valid TEKIR response.</p>
+        </div>
+        <div class="standard-card">
+          <h3>Model Context Protocol</h3>
+          <p>MCP handles tool discovery and invocation. TEKIR handles what comes back - the response. They're complementary.</p>
+        </div>
+        <div class="standard-card">
+          <h3>OpenAPI</h3>
+          <p>OpenAPI defines your API contract at design time. TEKIR provides runtime response metadata that agents can act on.</p>
+        </div>
+        <div class="standard-card">
+          <h3>HATEOAS</h3>
+          <p>REST promised self-describing APIs. TEKIR finally makes hypermedia controls practical - because LLMs can actually use them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>TEKIR is open source under the MIT License.</p>
+      <p>Built by <a href="https://github.com/tangelo-ltd">Tangelo Bilisim Ltd.</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function showTab(name) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

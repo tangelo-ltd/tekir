@@ -1,0 +1,40 @@
+{
+  "type": "https://api.example.com/problems/authentication-required",
+  "title": "Authentication required",
+  "status": 401,
+  "detail": "Valid authentication credentials are required to access this resource.",
+  "reason": "The token is missing, expired, or invalid.",
+  "limitations": [
+    {
+      "code": "invalid_token",
+      "detail": "The presented access token cannot be used."
+    }
+  ],
+  "user_confirmation_required": true,
+  "next_actions": [
+    {
+      "id": "refresh_token",
+      "title": "Re-authenticate / refresh token",
+      "description": "Obtain a new access token using the configured authorization flow.",
+      "href": "https://auth.example.com/oauth/token",
+      "method": "POST",
+      "effect": "external"
+    }
+  ],
+  "retry_policy": {
+    "retryable": true,
+    "retry_after": "0",
+    "max_attempts": 1
+  },
+  "agent_guidance": [
+    "Ask the user to confirm re-authentication before initiating any OAuth flow.",
+    "Do not request or display user secrets in plain text."
+  ],
+  "links": [
+    {
+      "rel": "help",
+      "href": "https://api.example.com/docs/auth",
+      "title": "Authentication documentation"
+    }
+  ]
+}
