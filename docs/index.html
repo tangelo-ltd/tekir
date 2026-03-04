@@ -749,6 +749,7 @@
   <div class="lang-switcher">
     <button class="active" onclick="setLang('en')">EN</button>
     <button onclick="setLang('tr')">TR</button>
+    <button onclick="setLang('de')">DE</button>
   </div>
 
   <!-- Hero -->
@@ -1095,6 +1096,31 @@
     </div>
   </section>
 
+  <!-- Disclaimer -->
+  <section class="disclaimer" style="padding: 40px 0 0;">
+    <div class="container">
+      <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 28px; max-width: 700px; margin: 0 auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="font-size: 1rem; margin: 0;" data-i18n="disclaimer_title">Disclaimer</h3>
+          <div class="disclaimer-lang" style="display: flex; gap: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--card-border); font-size: 0.7rem;">
+            <button class="active" onclick="setDisclaimerLang('en')" style="padding: 4px 10px; border: none; background: var(--amber); color: white; cursor: pointer; font-size: 0.7rem; font-weight: 600;">EN</button>
+            <button onclick="setDisclaimerLang('tr')" style="padding: 4px 10px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.7rem; font-weight: 600;">TR</button>
+            <button onclick="setDisclaimerLang('de')" style="padding: 4px 10px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.7rem; font-weight: 600;">DE</button>
+          </div>
+        </div>
+        <div id="disclaimer-en" class="disclaimer-text" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+          TEKIR is a free and open-source community project, provided under the MIT License. It is distributed in the hope that it will be useful, but without any warranty - without even the implied warranty of merchantability or fitness for a particular purpose. This is a non-commercial project. The authors and contributors accept no liability for any damages or losses arising from the use of this software or specification. Use at your own risk.
+        </div>
+        <div id="disclaimer-tr" class="disclaimer-text" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; display: none;">
+          TEKIR, MIT Lisansi altinda sunulan ucretsiz ve acik kaynakli bir topluluk projesidir. Faydali olacagi umidiyla dagitilmaktadir, ancak herhangi bir garanti verilmemektedir - satilabilirlik veya belirli bir amaca uygunluk garantisi dahil. Bu ticari olmayan bir projedir. Yazarlar ve katkilcilar, bu yazilimin veya spesifikasyonun kullanimindan kaynaklanan hicbir hasar veya kayiptan sorumluluk kabul etmez. Kullanim riski size aittir.
+        </div>
+        <div id="disclaimer-de" class="disclaimer-text" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; display: none;">
+          TEKIR ist ein kostenloses Open-Source-Gemeinschaftsprojekt, bereitgestellt unter der MIT-Lizenz. Es wird in der Hoffnung verbreitet, dass es nutzlich ist, jedoch ohne jegliche Gewahrleistung - auch ohne die stillschweigende Gewahrleistung der Marktgaengigkeit oder Eignung fuer einen bestimmten Zweck. Dies ist ein nichtkommerzielles Projekt. Die Autoren und Mitwirkenden uebernehmen keine Haftung fuer Schaeden oder Verluste, die aus der Nutzung dieser Software oder Spezifikation entstehen. Die Nutzung erfolgt auf eigene Gefahr.
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <div class="container">
@@ -1104,7 +1130,96 @@
   </footer>
 
   <script>
+    function setDisclaimerLang(lang) {
+      document.querySelectorAll('.disclaimer-lang button').forEach(btn => {
+        const isActive = btn.textContent.trim() === lang.toUpperCase();
+        btn.classList.toggle('active', isActive);
+        btn.style.background = isActive ? 'var(--amber)' : 'transparent';
+        btn.style.color = isActive ? 'white' : 'var(--text-muted)';
+      });
+      document.querySelectorAll('.disclaimer-text').forEach(el => {
+        el.style.display = 'none';
+      });
+      const target = document.getElementById('disclaimer-' + lang);
+      if (target) target.style.display = 'block';
+    }
+
     const translations = {
+      de: {
+        hero_intro: 'TEKIR ist ein offener Standard, der HTTP-API-Antworten <strong>fuer KI-Agenten selbsterklaerend</strong> macht. Statt kryptischer Statuscodes, die Agenten zum Raten zwingen, teilen TEKIR-angereicherte Antworten dem Aufrufer mit, <strong>was passiert ist</strong>, <strong>warum</strong> und <strong>was als Naechstes zu tun ist</strong> - sowohl bei Erfolgen als auch bei Fehlern.',
+        hero_github: 'Auf GitHub ansehen',
+        hero_spec: 'Spezifikation lesen',
+        story_title: 'Warum "Tekir"?',
+        story_text: '<em>Tekir</em> ist das tuerkische Wort fuer Tabby - die ikonische Mischlingskatze, die an jeder Ecke Istanbuls zu finden ist. Tekir-Katzen werden nicht fuer Stammbaum gezuechtet. Sie werden von der Strasse geformt: widerstandsfaehig, gerissen, genetisch vielfaeltig und durch Generationen natuerlicher Selektion geschaerft. Sie brauchen keinen Zuechter oder eine Anleitung - sie finden es selbst heraus. Genau das macht TEKIR fuer APIs: Es gibt jeder Antwort die Strassenintelligenz, sich selbst zu erklaeren, damit Agenten ohne Raten wissen, was zu tun ist.',
+        flow_title: 'Heutige APIs vs. APIs mit TEKIR',
+        flow_agent: 'KI-Agent',
+        flow_agent_detail: 'Macht einen API-Aufruf',
+        flow_api: 'Ihre API',
+        flow_api_detail: 'Gibt eine Antwort zurueck',
+        flow_whatnow: 'Was jetzt?',
+        flow_whatnow_detail: 'Agent muss handeln',
+        flow_without: 'Ohne TEKIR',
+        flow_with: 'Mit TEKIR',
+        bad_s1_title: 'API gibt 410 Gone zurueck',
+        bad_s1_desc: 'Kein Kontext, keine Orientierung',
+        bad_s2_title: 'Agent raet, was "gone" bedeutet',
+        bad_s2_desc: 'Geloescht? Archiviert? Verschoben?',
+        bad_s3_title: 'Agent halluziniert eine Wiederherstellung',
+        bad_s3_desc: 'Versucht zufaellige Endpoints, gibt auf oder stuerzt ab',
+        good_s1_title: 'API gibt 410 + TEKIR-Felder zurueck',
+        good_s1_desc: 'reason, next_actions, agent_guidance',
+        good_s2_title: 'Agent liest: "Thread ist archiviert"',
+        good_s2_desc: 'Weiss genau warum und was moeglich ist',
+        good_s3_title: 'Agent fragt Nutzer: "Neuen Thread erstellen?"',
+        good_s3_desc: 'Folgt next_actions, prueft Bestaetigungsflag',
+        json_title: 'Das JSON, nebeneinander',
+        json_without: 'Ohne TEKIR',
+        json_with: 'Mit TEKIR',
+        emptiness_msg: 'Nichts weiter. Kein Kontext, keine Orientierung, keine naechsten Schritte.<br>Der Agent ist auf sich allein gestellt.',
+        features_title: 'Warum TEKIR?',
+        feat1_title: 'Fuer KI-Agenten gebaut',
+        feat1_desc: 'Strukturierte Metadaten, ueber die LLMs nachdenken koennen - nicht nur Statuscodes und Raterei.',
+        feat2_title: 'Funktioniert auch bei 200 OK',
+        feat2_desc: 'Nicht nur fuer Fehler. Erfolgsantworten koennen Folgeaktionen, Orientierung und Workflow-Hinweise enthalten.',
+        feat3_title: 'Schnellstart ohne Installation',
+        feat3_desc: 'Legen Sie TEKIR.md in Ihr Projekt. Ihr KI-Assistent erstellt automatisch TEKIR-konforme APIs.',
+        feat4_title: 'Standardmaessig sicher',
+        feat4_desc: 'Seiteneffekt-Aktionen sind markiert. Nutzerbestaetigungs-Flags verhindern, dass Agenten ohne Genehmigung handeln.',
+        feat5_title: 'Standardbasiert',
+        feat5_desc: 'Erweitert RFC 9457. Abwaertskompatibel. Unbekannte Felder werden von bestehenden Clients sicher ignoriert.',
+        feat6_title: 'Framework-unabhaengig',
+        feat6_desc: 'Funktioniert mit jeder Sprache, jedem Framework. Fuegen Sie einfach die Felder zu Ihren JSON-Antworten hinzu.',
+        qs_title: 'In Sekunden loslegen',
+        qs_lead: 'Waehlen Sie Ihren Integrationsstil. Alles im selben Repository gepflegt.',
+        qs_recommended: 'Empfohlen',
+        qs_always_on: 'Immer aktiv',
+        qs1_title: 'Claude Code Plugin',
+        qs1_desc: 'Als Plugin installieren. Gibt Ihnen den /tekir-Befehl in Claude Code.',
+        qs2_title: 'Drop-in-Anweisungen',
+        qs2_desc: 'Fuegen Sie TEKIR.md zum Projektstamm hinzu. Ihr KI-Assistent folgt dem bei jeder Interaktion.',
+        qs3_title: 'Cursor-Regeln',
+        qs3_desc: 'Als .cursorrules ablegen fuer automatische TEKIR-Konformitaet in Cursor.',
+        fields_title: 'Erweiterungsfelder',
+        th_field: 'Feld',
+        th_type: 'Typ',
+        th_purpose: 'Zweck',
+        field_reason: 'Warum die Antwort dieses Ergebnis hat',
+        field_limitations: 'Einschraenkungen, die die Antwort beeinflusst haben',
+        field_next_actions: 'Maschinenlesbare Folgeschritte',
+        field_agent_guidance: 'Natuerlichsprachliche Anweisungen fuer Agenten',
+        field_ucr: 'Muss der Agent zuerst den Nutzer fragen?',
+        field_retry: 'Strukturierte Wiederholungshinweise',
+        field_links: 'Verwandte Ressourcen (RFC 8288)',
+        fields_note: 'Alle Felder sind optional. Fuegen Sie sie schrittweise hinzu - schon ein einzelnes <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">next_actions</code> macht einen Unterschied.',
+        standards_title: 'Spielt gut mit anderen',
+        std_rfc: 'TEKIR erweitert Problem Details ueber Fehler hinaus auf alle Antworten. Jede gueltige RFC 9457-Antwort ist eine gueltige TEKIR-Antwort.',
+        std_mcp: 'MCP kuemmert sich um Tool-Erkennung und -Aufruf. TEKIR kuemmert sich um das, was zurueckkommt - die Antwort. Sie ergaenzen sich.',
+        std_openapi: 'OpenAPI definiert Ihren API-Vertrag zur Entwurfszeit. TEKIR liefert Laufzeit-Antwort-Metadaten, auf die Agenten reagieren koennen.',
+        std_hateoas: 'REST versprach selbstbeschreibende APIs. TEKIR macht Hypermedia-Steuerungen endlich praktisch - weil LLMs sie tatsaechlich nutzen koennen.',
+        footer_license: 'TEKIR ist Open Source unter der MIT-Lizenz.',
+        footer_company: 'Entwickelt von <a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a> - einem kleinen Unternehmen aus Antalya, Tuerkei.',
+        disclaimer_title: 'Haftungsausschluss',
+      },
       tr: {
         hero_intro: 'TEKIR, HTTP API yan\u0131tlar\u0131n\u0131 <strong>yapay zeka ajanlar\u0131 i\u00e7in kendi kendini a\u00e7\u0131klayan</strong> hale getiren a\u00e7\u0131k bir standartt\u0131r. Ajanlar\u0131 tahmin yapmaya zorlayan anla\u015f\u0131lmaz durum kodlar\u0131 yerine, TEKIR ile zenginle\u015ftirilmi\u015f yan\u0131tlar arayana <strong>ne oldu\u011funu</strong>, <strong>neden oldu\u011funu</strong> ve <strong>s\u0131rada ne yap\u0131laca\u011f\u0131n\u0131</strong> s\u00f6yler - hem ba\u015far\u0131l\u0131 hem de hatal\u0131 yan\u0131tlarda.',
         hero_github: "GitHub'da G\u00f6r\u00fcnt\u00fcle",
@@ -1178,6 +1293,7 @@
         std_hateoas: "REST kendi kendini tan\u0131mlayan API'ler vaat etti. TEKIR sonunda hypermedia kontrollerini pratik hale getiriyor - \u00e7\u00fcnk\u00fc LLM'ler bunlar\u0131 ger\u00e7ekten kullanabiliyor.",
         footer_license: 'TEKIR, MIT Lisans\u0131 alt\u0131nda a\u00e7\u0131k kaynakt\u0131r.',
         footer_company: '<a href="https://tangelo.com.tr">Tangelo Bili\u015fim Ltd.</a> taraf\u0131ndan \u00f6zenle yap\u0131ld\u0131 - Antalya, T\u00fcrkiye merkezli k\u00fc\u00e7\u00fck bir \u015firket.',
+        disclaimer_title: 'Sorumluluk Reddi',
       }
     };
 
@@ -1206,8 +1322,8 @@
       document.documentElement.lang = lang;
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (lang === 'tr' && translations.tr[key]) {
-          el.innerHTML = translations.tr[key];
+        if (lang !== 'en' && translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
         } else {
           el.innerHTML = originals[key];
         }

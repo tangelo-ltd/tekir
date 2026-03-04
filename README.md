@@ -327,6 +327,16 @@ Spec proposals should be opened as GitHub Issues with the `[Proposal]` tag.
 
 ---
 
+## Disclaimer
+
+TEKIR is a free and open-source community project, provided under the [MIT License](./LICENSE). It is distributed in the hope that it will be useful, but **without any warranty** - without even the implied warranty of merchantability or fitness for a particular purpose.
+
+This is a non-commercial project. The authors and contributors accept no liability for any damages or losses arising from the use of this software or specification. Use it at your own risk.
+
+Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+---
+
 <p align="center">
   <em>Built with care by <a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a> - a small company based in Antalya, Turkey.</em>
 </p>
