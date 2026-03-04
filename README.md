@@ -16,7 +16,6 @@
 <p align="center">
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
   <a href="./spec/tekir-v0.1.md"><img src="https://img.shields.io/badge/Spec-v0.1-orange.svg" alt="Spec: v0.1"></a>
-  <a href="https://www.npmjs.com/package/tekir"><img src="https://img.shields.io/npm/v/tekir.svg" alt="npm version"></a>
   <a href="https://github.com/tangelo-ltd/tekir/issues"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
 </p>
 
@@ -111,7 +110,7 @@ TEKIR is a lightweight standard that adds structured, machine-actionable metadat
 
 It builds on [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) (Problem Details for HTTP APIs) but goes further: TEKIR fields work in **any** JSON response, not just error responses.
 
-**Why "TEKIR"?** Tekir is the Turkish word for tabby cat - curious, observant, and always knows what to do next. It stands for **T**ransparent **E**ndpoint **K**nowledge for **I**ntelligent **R**easoning.
+**Why "TEKIR"?** In Turkish, *tekir* is the word for tabby - the iconic mixed-breed street cat found on every corner of Istanbul. Tekir cats are not bred for pedigree. They are forged by the streets: resilient, cunning, genetically diverse, and sharpened by generations of natural selection. They don't need a breeder or a manual - they figure things out. That's exactly what TEKIR does for APIs: it gives every response the street smarts to explain itself, so agents can figure out what to do next without guessing. It stands for **T**ransparent **E**ndpoint **K**nowledge for **I**ntelligent **R**easoning.
 
 ---
 
@@ -299,5 +298,5 @@ Spec proposals should be opened as GitHub Issues with the `[Proposal]` tag.
 ---
 
 <p align="center">
-  <em>Built with care by <a href="https://github.com/tangelo-ltd">Tangelo Bilisim Ltd.</a></em>
+  <em>Built with care by <a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a></em>
 </p>
