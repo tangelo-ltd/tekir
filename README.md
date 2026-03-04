@@ -21,6 +21,10 @@
 
 ---
 
+<h3 align="center"><em>Your AI agents are burning tokens, retrying blindly, and hallucinating recovery strategies - all because your API won't tell them what to do next.</em></h3>
+
+---
+
 ## The Problem
 
 Your API returns this when something goes wrong:
