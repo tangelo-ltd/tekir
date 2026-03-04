@@ -459,6 +459,61 @@
       overflow-x: auto;
     }
 
+    .quickstart-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .quickstart-cards { grid-template-columns: 1fr; }
+    }
+
+    .qs-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .qs-card .qs-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--amber-dark);
+      background: rgba(212, 149, 106, 0.15);
+      padding: 4px 10px;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    .qs-card h3 {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .qs-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .qs-card pre {
+      margin: 0;
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
     /* Fields Table */
     .fields {
       padding: 60px 0;
@@ -559,9 +614,52 @@
       color: var(--amber-dark);
       text-decoration: none;
     }
+
+    /* Language switcher */
+    .lang-switcher {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+      display: flex;
+      gap: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .lang-switcher button {
+      padding: 8px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .lang-switcher button.active {
+      background: var(--amber);
+      color: white;
+    }
+
+    .lang-switcher button:hover:not(.active) {
+      background: var(--card-border);
+    }
   </style>
 </head>
 <body>
+
+  <!-- Language Switcher -->
+  <div class="lang-switcher">
+    <button class="active" onclick="setLang('en')">EN</button>
+    <button onclick="setLang('tr')">TR</button>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -569,18 +667,23 @@
       <img src="./assets/tekir-logo.svg" alt="TEKIR cat logo" class="hero-logo">
       <h1>TEKIR</h1>
       <p class="subtitle"><u>T</u>ransparent <u>E</u>ndpoint <u>K</u>nowledge for <u>I</u>ntelligent <u>R</u>easoning</p>
-      <p class="intro">
+      <p class="intro" data-i18n="hero_intro">
         TEKIR is an open standard that makes HTTP API responses <strong>self-explaining for AI agents</strong>.
         Instead of returning cryptic status codes that leave agents guessing, TEKIR-enriched responses tell the caller
         <strong>what happened</strong>, <strong>why</strong>, and <strong>what to do next</strong> -
         for both successes and errors.
       </p>
       <div class="hero-buttons">
-        <a href="https://github.com/tangelo-ltd/tekir" class="btn btn-primary">
+        <a href="https://github.com/tangelo-ltd/tekir" class="btn btn-primary" data-i18n="hero_github">
           View on GitHub
         </a>
-        <a href="https://github.com/tangelo-ltd/tekir/blob/main/spec/tekir-v0.1.md" class="btn btn-secondary">
+        <a href="https://github.com/tangelo-ltd/tekir/blob/main/spec/tekir-v0.1.md" class="btn btn-secondary" data-i18n="hero_spec">
           Read the Spec
+        </a>
+      </div>
+      <div style="margin-top: 16px;">
+        <a href="https://github.com/tangelo-ltd/tekir">
+          <img src="https://img.shields.io/github/stars/tangelo-ltd/tekir?style=social" alt="GitHub stars">
         </a>
       </div>
     </div>
@@ -592,8 +695,8 @@
       <div class="name-story-inner">
         <div class="name-story-icon">🐈</div>
         <div class="name-story-text">
-          <h3>Why "Tekir"?</h3>
-          <p>
+          <h3 data-i18n="story_title">Why "Tekir"?</h3>
+          <p data-i18n="story_text">
             In Turkish, <em>tekir</em> is the word for tabby - the iconic mixed-breed street cat found on every corner of Istanbul.
             Tekir cats are not bred for pedigree. They are forged by the streets: resilient, cunning, genetically diverse,
             and sharpened by generations of natural selection. They don't need a breeder or a manual - they figure things out.
@@ -608,28 +711,28 @@
   <!-- Visual Flow Diagram -->
   <section class="visual-flow">
     <div class="container">
-      <h2>APIs today vs. APIs with TEKIR</h2>
+      <h2 data-i18n="flow_title">APIs today vs. APIs with TEKIR</h2>
 
       <!-- High-level flow -->
       <div class="flow-diagram">
         <div class="flow-box agent">
           <div class="flow-icon">🤖</div>
-          <div class="flow-label">AI Agent</div>
-          <div class="flow-detail">Makes an API call</div>
+          <div class="flow-label" data-i18n="flow_agent">AI Agent</div>
+          <div class="flow-detail" data-i18n="flow_agent_detail">Makes an API call</div>
         </div>
         <div class="flow-arrow">&#8594;</div>
         <div class="flow-arrow down">&#8595;</div>
         <div class="flow-box api">
           <div class="flow-icon">🌐</div>
-          <div class="flow-label">Your API</div>
-          <div class="flow-detail">Returns a response</div>
+          <div class="flow-label" data-i18n="flow_api">Your API</div>
+          <div class="flow-detail" data-i18n="flow_api_detail">Returns a response</div>
         </div>
         <div class="flow-arrow">&#8594;</div>
         <div class="flow-arrow down">&#8595;</div>
         <div class="flow-box">
           <div class="flow-icon">&#10067;</div>
-          <div class="flow-label">What now?</div>
-          <div class="flow-detail">Agent needs to act</div>
+          <div class="flow-label" data-i18n="flow_whatnow">What now?</div>
+          <div class="flow-detail" data-i18n="flow_whatnow_detail">Agent needs to act</div>
         </div>
       </div>
 
@@ -637,28 +740,28 @@
       <div class="flow-rows">
         <div class="flow-row bad">
           <div class="flow-row-header">
-            <span class="emoji">&#10060;</span> Without TEKIR
+            <span class="emoji">&#10060;</span> <span data-i18n="flow_without">Without TEKIR</span>
           </div>
           <div class="flow-row-body">
             <div class="flow-step">
               <div class="flow-step-num">1</div>
               <div class="flow-step-text">
-                <strong>API returns 410 Gone</strong>
-                <span>No context, no guidance</span>
+                <strong data-i18n="bad_s1_title">API returns 410 Gone</strong>
+                <span data-i18n="bad_s1_desc">No context, no guidance</span>
               </div>
             </div>
             <div class="flow-step">
               <div class="flow-step-num">2</div>
               <div class="flow-step-text">
-                <strong>Agent guesses what "gone" means</strong>
-                <span>Is it deleted? Archived? Moved?</span>
+                <strong data-i18n="bad_s2_title">Agent guesses what "gone" means</strong>
+                <span data-i18n="bad_s2_desc">Is it deleted? Archived? Moved?</span>
               </div>
             </div>
             <div class="flow-step">
               <div class="flow-step-num">3</div>
               <div class="flow-step-text">
-                <strong>Agent hallucinates a recovery</strong>
-                <span>Tries random endpoints, gives up, or crashes</span>
+                <strong data-i18n="bad_s3_title">Agent hallucinates a recovery</strong>
+                <span data-i18n="bad_s3_desc">Tries random endpoints, gives up, or crashes</span>
               </div>
             </div>
           </div>
@@ -666,28 +769,28 @@
 
         <div class="flow-row good">
           <div class="flow-row-header">
-            <span class="emoji">&#9989;</span> With TEKIR
+            <span class="emoji">&#9989;</span> <span data-i18n="flow_with">With TEKIR</span>
           </div>
           <div class="flow-row-body">
             <div class="flow-step">
               <div class="flow-step-num">1</div>
               <div class="flow-step-text">
-                <strong>API returns 410 + TEKIR fields</strong>
-                <span>reason, next_actions, agent_guidance</span>
+                <strong data-i18n="good_s1_title">API returns 410 + TEKIR fields</strong>
+                <span data-i18n="good_s1_desc">reason, next_actions, agent_guidance</span>
               </div>
             </div>
             <div class="flow-step">
               <div class="flow-step-num">2</div>
               <div class="flow-step-text">
-                <strong>Agent reads: "Thread is archived"</strong>
-                <span>Knows exactly why and what's possible</span>
+                <strong data-i18n="good_s2_title">Agent reads: "Thread is archived"</strong>
+                <span data-i18n="good_s2_desc">Knows exactly why and what's possible</span>
               </div>
             </div>
             <div class="flow-step">
               <div class="flow-step-num">3</div>
               <div class="flow-step-text">
-                <strong>Agent asks user: "Create a new thread?"</strong>
-                <span>Follows next_actions, respects confirmation flag</span>
+                <strong data-i18n="good_s3_title">Agent asks user: "Create a new thread?"</strong>
+                <span data-i18n="good_s3_desc">Follows next_actions, respects confirmation flag</span>
               </div>
             </div>
           </div>
@@ -699,10 +802,10 @@
   <!-- JSON Comparison -->
   <section class="comparison">
     <div class="container">
-      <h3>The JSON, side by side</h3>
+      <h3 data-i18n="json_title">The JSON, side by side</h3>
       <div class="comparison-grid">
         <div class="comparison-card before">
-          <div class="label">Without TEKIR</div>
+          <div class="label" data-i18n="json_without">Without TEKIR</div>
           <pre><code>{
   "status": 410,
   "message": "Gone"
@@ -711,7 +814,7 @@
 // Agent: "...what do I do now?"</code></pre>
         </div>
         <div class="comparison-card after">
-          <div class="label">With TEKIR</div>
+          <div class="label" data-i18n="json_with">With TEKIR</div>
           <pre><code>{
   "status": 410,
   "title": "Thread is gone",
@@ -752,37 +855,37 @@
   <!-- Features -->
   <section class="features">
     <div class="container">
-      <h2>Why TEKIR?</h2>
+      <h2 data-i18n="features_title">Why TEKIR?</h2>
       <div class="features-grid">
         <div class="feature-card">
           <div class="icon">🤖</div>
-          <h3>Built for AI agents</h3>
-          <p>Structured metadata that LLMs can reason about - not just status codes and guesswork.</p>
+          <h3 data-i18n="feat1_title">Built for AI agents</h3>
+          <p data-i18n="feat1_desc">Structured metadata that LLMs can reason about - not just status codes and guesswork.</p>
         </div>
         <div class="feature-card">
           <div class="icon">&#9989;</div>
-          <h3>Works on 200 OK too</h3>
-          <p>Not just errors. Success responses can include follow-up actions, guidance, and workflow hints.</p>
+          <h3 data-i18n="feat2_title">Works on 200 OK too</h3>
+          <p data-i18n="feat2_desc">Not just errors. Success responses can include follow-up actions, guidance, and workflow hints.</p>
         </div>
         <div class="feature-card">
           <div class="icon">&#9889;</div>
-          <h3>Zero-install quick start</h3>
-          <p>Drop TEKIR.md into your project. Your AI coding assistant builds TEKIR-compliant APIs automatically.</p>
+          <h3 data-i18n="feat3_title">Zero-install quick start</h3>
+          <p data-i18n="feat3_desc">Drop TEKIR.md into your project. Your AI coding assistant builds TEKIR-compliant APIs automatically.</p>
         </div>
         <div class="feature-card">
           <div class="icon">&#128274;</div>
-          <h3>Safe by default</h3>
-          <p>Effectful actions are tagged. User confirmation flags prevent agents from acting without approval.</p>
+          <h3 data-i18n="feat4_title">Safe by default</h3>
+          <p data-i18n="feat4_desc">Effectful actions are tagged. User confirmation flags prevent agents from acting without approval.</p>
         </div>
         <div class="feature-card">
           <div class="icon">&#128208;</div>
-          <h3>Standards-based</h3>
-          <p>Extends RFC 9457. Backwards compatible. Unknown fields are safely ignored by existing clients.</p>
+          <h3 data-i18n="feat5_title">Standards-based</h3>
+          <p data-i18n="feat5_desc">Extends RFC 9457. Backwards compatible. Unknown fields are safely ignored by existing clients.</p>
         </div>
         <div class="feature-card">
           <div class="icon">&#127758;</div>
-          <h3>Framework agnostic</h3>
-          <p>Works with any language, any framework. Just add the fields to your JSON responses.</p>
+          <h3 data-i18n="feat6_title">Framework agnostic</h3>
+          <p data-i18n="feat6_desc">Works with any language, any framework. Just add the fields to your JSON responses.</p>
         </div>
       </div>
     </div>
@@ -791,73 +894,86 @@
   <!-- Quick Start -->
   <section class="quickstart">
     <div class="container">
-      <h2>Get started in seconds</h2>
-      <p class="lead">Pick your integration style. All maintained in the same repo.</p>
-      <pre><code># Option 1: Claude Code slash command - type /tekir to activate
-mkdir -p .claude/commands
-curl -o .claude/commands/tekir.md https://raw.githubusercontent.com/tangelo-ltd/tekir/main/.claude/commands/tekir.md
-
-# Option 2: Drop-in instructions - always active in your project
-curl -o TEKIR.md https://raw.githubusercontent.com/tangelo-ltd/tekir/main/TEKIR.md
-
-# Option 3: Cursor rules
-curl -o .cursorrules https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md
-
-# That's it. Your AI assistant now builds TEKIR-compliant APIs automatically.</code></pre>
+      <h2 data-i18n="qs_title">Get started in seconds</h2>
+      <p class="lead" data-i18n="qs_lead">Pick your integration style. All maintained in the same repo.</p>
+      <div class="quickstart-cards">
+        <div class="qs-card">
+          <div class="qs-badge" data-i18n="qs_recommended">Recommended</div>
+          <h3 data-i18n="qs1_title">Claude Code Skill</h3>
+          <p data-i18n="qs1_desc">Install the /tekir slash command. Invoke it whenever you want TEKIR-compliant endpoints.</p>
+          <pre><code>mkdir -p .claude/commands
+curl -o .claude/commands/tekir.md \
+  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/.claude/commands/tekir.md</code></pre>
+        </div>
+        <div class="qs-card">
+          <div class="qs-badge" data-i18n="qs_always_on">Always on</div>
+          <h3 data-i18n="qs2_title">Drop-in Instructions</h3>
+          <p data-i18n="qs2_desc">Add TEKIR.md to your project root. Your AI assistant follows it on every interaction.</p>
+          <pre><code>curl -o TEKIR.md \
+  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/TEKIR.md</code></pre>
+        </div>
+        <div class="qs-card">
+          <div class="qs-badge">Cursor</div>
+          <h3 data-i18n="qs3_title">Cursor Rules</h3>
+          <p data-i18n="qs3_desc">Drop as .cursorrules for automatic TEKIR compliance in Cursor.</p>
+          <pre><code>curl -o .cursorrules \
+  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md</code></pre>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Extension Fields -->
   <section class="fields">
     <div class="container">
-      <h2>Extension Fields</h2>
+      <h2 data-i18n="fields_title">Extension Fields</h2>
       <table class="fields-table">
         <thead>
           <tr>
-            <th>Field</th>
-            <th>Type</th>
-            <th>Purpose</th>
+            <th data-i18n="th_field">Field</th>
+            <th data-i18n="th_type">Type</th>
+            <th data-i18n="th_purpose">Purpose</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>reason</code></td>
             <td>string</td>
-            <td>Why the response has this outcome</td>
+            <td data-i18n="field_reason">Why the response has this outcome</td>
           </tr>
           <tr>
             <td><code>limitations</code></td>
             <td>array</td>
-            <td>Constraints that affected the response</td>
+            <td data-i18n="field_limitations">Constraints that affected the response</td>
           </tr>
           <tr>
             <td><code>next_actions</code></td>
             <td>array</td>
-            <td>Machine-actionable follow-up steps</td>
+            <td data-i18n="field_next_actions">Machine-actionable follow-up steps</td>
           </tr>
           <tr>
             <td><code>agent_guidance</code></td>
             <td>array</td>
-            <td>Natural-language instructions for agents</td>
+            <td data-i18n="field_agent_guidance">Natural-language instructions for agents</td>
           </tr>
           <tr>
             <td><code>user_confirmation_required</code></td>
             <td>boolean</td>
-            <td>Must the agent ask the user first?</td>
+            <td data-i18n="field_ucr">Must the agent ask the user first?</td>
           </tr>
           <tr>
             <td><code>retry_policy</code></td>
             <td>object</td>
-            <td>Structured retry hints</td>
+            <td data-i18n="field_retry">Structured retry hints</td>
           </tr>
           <tr>
             <td><code>links</code></td>
             <td>array</td>
-            <td>Related resources (RFC 8288)</td>
+            <td data-i18n="field_links">Related resources (RFC 8288)</td>
           </tr>
         </tbody>
       </table>
-      <p style="text-align: center; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">
+      <p style="text-align: center; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;" data-i18n="fields_note">
         All fields are optional. Add them incrementally - even one <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">next_actions</code> makes a difference.
       </p>
     </div>
@@ -866,23 +982,23 @@ curl -o .cursorrules https://raw.githubusercontent.com/tangelo-ltd/tekir/main/pr
   <!-- Complementary Standards -->
   <section class="standards">
     <div class="container">
-      <h2>Plays well with others</h2>
+      <h2 data-i18n="standards_title">Plays well with others</h2>
       <div class="standards-grid">
         <div class="standard-card">
-          <h3>RFC 9457</h3>
-          <p>TEKIR extends Problem Details beyond errors to all responses. Every valid RFC 9457 response is a valid TEKIR response.</p>
+          <h3><a href="https://www.rfc-editor.org/rfc/rfc9457" style="color: var(--blue); text-decoration: none;">RFC 9457</a></h3>
+          <p data-i18n="std_rfc">TEKIR extends Problem Details beyond errors to all responses. Every valid RFC 9457 response is a valid TEKIR response.</p>
         </div>
         <div class="standard-card">
-          <h3>Model Context Protocol</h3>
-          <p>MCP handles tool discovery and invocation. TEKIR handles what comes back - the response. They're complementary.</p>
+          <h3><a href="https://modelcontextprotocol.io" style="color: var(--blue); text-decoration: none;">Model Context Protocol</a></h3>
+          <p data-i18n="std_mcp">MCP handles tool discovery and invocation. TEKIR handles what comes back - the response. They're complementary.</p>
         </div>
         <div class="standard-card">
-          <h3>OpenAPI</h3>
-          <p>OpenAPI defines your API contract at design time. TEKIR provides runtime response metadata that agents can act on.</p>
+          <h3><a href="https://www.openapis.org" style="color: var(--blue); text-decoration: none;">OpenAPI</a></h3>
+          <p data-i18n="std_openapi">OpenAPI defines your API contract at design time. TEKIR provides runtime response metadata that agents can act on.</p>
         </div>
         <div class="standard-card">
-          <h3>HATEOAS</h3>
-          <p>REST promised self-describing APIs. TEKIR finally makes hypermedia controls practical - because LLMs can actually use them.</p>
+          <h3><a href="https://en.wikipedia.org/wiki/HATEOAS" style="color: var(--blue); text-decoration: none;">HATEOAS</a></h3>
+          <p data-i18n="std_hateoas">REST promised self-describing APIs. TEKIR finally makes hypermedia controls practical - because LLMs can actually use them.</p>
         </div>
       </div>
     </div>
@@ -891,10 +1007,109 @@ curl -o .cursorrules https://raw.githubusercontent.com/tangelo-ltd/tekir/main/pr
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>TEKIR is open source under the MIT License.</p>
-      <p>Built by <a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a> - a small company based in Antalya, Turkey.</p>
+      <p data-i18n="footer_license">TEKIR is open source under the MIT License.</p>
+      <p data-i18n="footer_company">Built by <a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a> - a small company based in Antalya, Turkey.</p>
     </div>
   </footer>
+
+  <script>
+    const translations = {
+      tr: {
+        hero_intro: 'TEKIR, HTTP API yanitlarini <strong>yapay zeka ajanlari icin kendi kendini aciklayan</strong> hale getiren acik bir standarttir. Ajanlari tahmin yapmaya zorlayan anlasilmaz durum kodlari yerine, TEKIR ile zenginlestirilmis yanitlar arayana <strong>ne oldugunu</strong>, <strong>neden oldugunu</strong> ve <strong>sirada ne yapilacagini</strong> soyler - hem basarili hem de hatali yanitlarda.',
+        hero_github: "GitHub'da Goruntule",
+        hero_spec: 'Spesifikasyonu Oku',
+        story_title: 'Neden "Tekir"?',
+        story_text: "<em>Tekir</em>, Turkce'de tekir kedi anlamina gelir - Istanbul'un her sokaginda bulunan ikonik melez sokak kedisi. Tekir kediler safkan olarak yetistirilmez. Sokaklar tarafindan sekillenir: dayanikli, kurnaz, genetik olarak cesitli ve nesiller boyu dogal secilimle bilenmis. Bir yetistiriciye veya kullanma kilavuzuna ihtiyaclari yoktur - her seyi kendileri cozerler. TEKIR'in API'ler icin yaptigi tam olarak budur: her yanita kendini aciklayacak sokak zekasi verir, boylece ajanlar tahmin yapmadan ne yapacaklarini bilir.",
+        flow_title: "Bugunku API'ler vs. TEKIR'li API'ler",
+        flow_agent: 'Yapay Zeka Ajani',
+        flow_agent_detail: 'API cagrisi yapar',
+        flow_api: "API'niz",
+        flow_api_detail: 'Yanit dondurur',
+        flow_whatnow: 'Simdi ne olacak?',
+        flow_whatnow_detail: 'Ajan aksiyon almali',
+        flow_without: "TEKIR'siz",
+        flow_with: "TEKIR'le",
+        bad_s1_title: 'API 410 Gone dondurur',
+        bad_s1_desc: 'Baglam yok, yonlendirme yok',
+        bad_s2_title: 'Ajan "gone" ne demek tahmin eder',
+        bad_s2_desc: 'Silindi mi? Arsivlendi mi? Tasindi mi?',
+        bad_s3_title: 'Ajan bir kurtarma yolu halusinasyonu yapar',
+        bad_s3_desc: 'Rastgele endpoint dener, vazgecer veya coker',
+        good_s1_title: 'API 410 + TEKIR alanlari dondurur',
+        good_s1_desc: 'reason, next_actions, agent_guidance',
+        good_s2_title: 'Ajan okur: "Konu arsivlendi"',
+        good_s2_desc: 'Neden ve ne mumkun tam olarak bilir',
+        good_s3_title: 'Ajan kullaniciya sorar: "Yeni konu acalim mi?"',
+        good_s3_desc: "next_actions'i takip eder, onay bayragi kontrol eder",
+        json_title: 'JSON, yan yana',
+        json_without: "TEKIR'siz",
+        json_with: "TEKIR'le",
+        features_title: 'Neden TEKIR?',
+        feat1_title: 'Yapay zeka ajanlari icin',
+        feat1_desc: "LLM'lerin anlayabilecegi yapilandirilmis metadata - sadece durum kodlari ve tahmin degil.",
+        feat2_title: '200 OK icin de calisir',
+        feat2_desc: 'Sadece hatalar icin degil. Basarili yanitlar da takip eylemleri, rehberlik ve is akisi ipuclari icerebilir.',
+        feat3_title: 'Kurulum gerektirmeyen baslangic',
+        feat3_desc: "TEKIR.md'yi projenize birakin. Yapay zeka kodlama asistani TEKIR uyumlu API'leri otomatik olusturur.",
+        feat4_title: 'Varsayilan olarak guvenli',
+        feat4_desc: 'Yan etkili eylemler etiketlenir. Kullanici onay bayraklari ajanlarin onaysiz hareket etmesini onler.',
+        feat5_title: 'Standart tabanli',
+        feat5_desc: 'RFC 9457 uzerine kuruludur. Geriye uyumlu. Bilinmeyen alanlar mevcut istemciler tarafindan guvende yok sayilir.',
+        feat6_title: 'Framework bagimsiz',
+        feat6_desc: 'Her dil, her framework ile calisir. JSON yanitlariniza alanlari eklemeniz yeterli.',
+        qs_title: 'Saniyeler icinde baslayin',
+        qs_lead: 'Entegrasyon yontinizi secin. Hepsi ayni repodan yonetilir.',
+        qs_recommended: 'Onerilen',
+        qs_always_on: 'Her zaman aktif',
+        qs1_title: 'Claude Code Skill',
+        qs1_desc: "/tekir komutunu yukleyin. TEKIR uyumlu endpoint'ler istediginizde cagirin.",
+        qs2_title: 'Otomatik Talimatlar',
+        qs2_desc: "TEKIR.md'yi projenizin kokune ekleyin. Yapay zeka asistani her etkilesimde bunu takip eder.",
+        qs3_title: 'Cursor Kurallari',
+        qs3_desc: "Cursor'da otomatik TEKIR uyumlulugu icin .cursorrules olarak birakin.",
+        fields_title: 'Eklenti Alanlari',
+        th_field: 'Alan',
+        th_type: 'Tip',
+        th_purpose: 'Amac',
+        field_reason: 'Yanitin bu sonuca neden sahip oldugu',
+        field_limitations: 'Yaniti etkileyen kisitlamalar',
+        field_next_actions: 'Makine tarafindan uygulanabilir takip adimlari',
+        field_agent_guidance: 'Ajanlar icin dogal dilde talimatlar',
+        field_ucr: 'Ajan once kullaniciya sormali mi?',
+        field_retry: 'Yapilandirilmis yeniden deneme ipuclari',
+        field_links: 'Iliskili kaynaklar (RFC 8288)',
+        fields_note: 'Tum alanlar istege baglidir. Kademeli olarak ekleyin - tek bir <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">next_actions</code> bile fark yaratir.',
+        standards_title: 'Diger standartlarla uyumlu',
+        std_rfc: "TEKIR, Problem Details'i hatalardan tum yanitlara genisletir. Her gecerli RFC 9457 yaniti gecerli bir TEKIR yanitidir.",
+        std_mcp: "MCP arac kesfi ve calistirmayi yonetir. TEKIR geri donenle ilgilenir - yanitla. Birbirini tamamlarlar.",
+        std_openapi: "OpenAPI, API sozlesmesini tasarim zamaninda tanimlar. TEKIR, ajanlarin uzerinde islem yapabilecegi calisma zamani yanit metadatasi saglar.",
+        std_hateoas: "REST kendi kendini tanimlayan API'ler vaat etti. TEKIR sonunda hypermedia kontrollerini pratik hale getiriyor - cunku LLM'ler bunlari gercekten kullanabiliyor.",
+        footer_license: 'TEKIR, MIT Lisansi altinda acik kaynaktir.',
+        footer_company: '<a href="https://tangelo.com.tr">Tangelo Bilisim Ltd.</a> tarafindan ozenle yapildi - Antalya, Turkiye merkezli kucuk bir sirket.',
+      }
+    };
+
+    // Store original English content
+    const originals = {};
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      originals[el.getAttribute('data-i18n')] = el.innerHTML;
+    });
+
+    function setLang(lang) {
+      document.querySelectorAll('.lang-switcher button').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+      });
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (lang === 'tr' && translations.tr[key]) {
+          el.innerHTML = translations.tr[key];
+        } else {
+          el.innerHTML = originals[key];
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>

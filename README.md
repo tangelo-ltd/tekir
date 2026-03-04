@@ -14,6 +14,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/tangelo-ltd/tekir/stargazers"><img src="https://img.shields.io/github/stars/tangelo-ltd/tekir?style=social" alt="GitHub stars"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
   <a href="./spec/tekir-v0.1.md"><img src="https://img.shields.io/badge/Spec-v0.1-orange.svg" alt="Spec: v0.1"></a>
   <a href="https://github.com/tangelo-ltd/tekir/issues"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
@@ -282,10 +283,10 @@ app.post('/orders', (request, reply) => {
 
 | Standard | What it does | How TEKIR fits |
 |----------|-------------|----------------|
-| **RFC 9457** | Error response envelope | TEKIR extends it beyond errors to all responses |
-| **MCP** | Tool discovery and invocation for agents | TEKIR handles what happens *after* the tool call - the response |
-| **OpenAPI** | API contract at design time | TEKIR provides runtime response metadata |
-| **HATEOAS** | Hypermedia-driven APIs | TEKIR makes hypermedia controls practical for LLM agents |
+| [**RFC 9457**](https://www.rfc-editor.org/rfc/rfc9457) | Error response envelope | TEKIR extends it beyond errors to all responses |
+| [**MCP**](https://modelcontextprotocol.io) | Tool discovery and invocation for agents | TEKIR handles what happens *after* the tool call - the response |
+| [**OpenAPI**](https://www.openapis.org) | API contract at design time | TEKIR provides runtime response metadata |
+| [**HATEOAS**](https://en.wikipedia.org/wiki/HATEOAS) | Hypermedia-driven APIs | TEKIR makes hypermedia controls practical for LLM agents |
 
 ---
 
