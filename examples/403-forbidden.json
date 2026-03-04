@@ -3,38 +3,39 @@
   "title": "Response restricted by policy",
   "status": 403,
   "detail": "The requested data cannot be provided under the current policy constraints.",
-  "reason": "Sensitive fields require additional user-provided justification or narrower scope.",
+  "reason": "This endpoint returns employee records that include salary and personal contact information. Your API key has 'hr-read' scope but accessing salary data requires 'hr-compensation' scope, which must be approved by a department head. Personal contact fields (phone, personal email) require 'hr-pii' scope and are subject to GDPR audit logging.",
+
   "limitations": [
     {
       "code": "policy_redaction",
-      "detail": "One or more requested fields are restricted.",
+      "detail": "Fields 'salary', 'bonus', 'stock_options' require 'hr-compensation' scope. Fields 'personal_phone', 'personal_email', 'home_address' require 'hr-pii' scope.",
       "target": "/requested_fields/0"
     },
     {
       "code": "insufficient_justification",
-      "detail": "The request did not include a user-approved business justification."
+      "detail": "Requests for compensation or PII data must include a business justification string that will be recorded in the audit log. The justification should describe why the data is needed and for what business process."
     }
   ],
   "user_confirmation_required": true,
   "next_actions": [
     {
       "id": "narrow_request",
-      "title": "Request a narrower field set",
-      "description": "Retry with fewer (non-restricted) fields.",
-      "href": "https://api.example.com/v1/reports?fields=non_sensitive_subset",
+      "title": "Request non-restricted fields only",
+      "description": "Retry the request with only non-restricted fields. This returns employee name, department, title, office location, and work email - no additional scope or justification needed. This is the fastest path if the user does not actually need compensation or personal data.",
+      "href": "https://api.example.com/v1/employees?fields=name,department,title,office,work_email",
       "method": "GET",
       "effect": "read"
     },
     {
-      "id": "submit_justification",
-      "title": "Submit user-approved justification",
-      "description": "Only proceed if the user explicitly confirms the justification text.",
-      "href": "https://api.example.com/v1/policy/justifications",
+      "id": "request_scope",
+      "title": "Request elevated scope",
+      "description": "Opens a scope elevation request for the current API key. Requires department head approval and typically takes 1-2 business days. The user will receive an email notification when approved or denied. Once approved, the scope is permanently added to the API key.",
+      "href": "https://api.example.com/v1/access-requests",
       "method": "POST",
       "effect": "write",
       "body": {
-        "purpose": "",
-        "requested_scope": ""
+        "requested_scopes": ["hr-compensation"],
+        "justification": ""
       }
     }
   ],
@@ -42,7 +43,9 @@
     "retryable": false
   },
   "agent_guidance": [
-    "Ask the user for a business justification only if the user intends to proceed.",
-    "If the user declines, prefer narrowing the request to non-restricted fields."
+    "Ask the user what data they actually need. If they only need basic employee info (name, department, title), use the narrow_request action - no approval process required.",
+    "If they need compensation data, explain that it requires elevated scope with department head approval (1-2 business days) and ask if they want to submit a request.",
+    "For the scope elevation request, the user must provide a business justification - help them write one that clearly states the business need.",
+    "Do not attempt to access restricted fields through alternative endpoints or parameter manipulation - the policy is enforced server-side across all endpoints."
   ]
 }

@@ -3,24 +3,37 @@
   "title": "Rate limit exceeded",
   "status": 429,
   "detail": "Too many requests within the current window.",
-  "reason": "The request exceeded the user-level quota.",
+  "reason": "This API enforces per-user rate limits of 60 requests per minute. The current window resets in 30 seconds. Rate limits are applied per API key, not per endpoint - all endpoints share the same quota.",
+
   "limitations": [
     {
       "code": "quota_window_exceeded",
-      "detail": "Try again after the reset."
+      "detail": "60/60 requests used in current window. The quota resets at 2026-03-04T10:31:00Z. Consider batching multiple operations into a single request where the API supports it (e.g. /v1/batch endpoint)."
     }
   ],
   "retry_policy": {
     "retryable": true,
     "retry_after": "30",
-    "max_attempts": 5,
+    "max_attempts": 3,
     "backoff": "exponential",
     "idempotency_key": true
   },
+  "next_actions": [
+    {
+      "id": "check_usage",
+      "title": "Check current usage",
+      "description": "Returns your current rate limit status including remaining quota, reset time, and historical usage patterns. Use this to plan your request scheduling. The response also includes your plan's total limits and upgrade options if you consistently hit the ceiling.",
+      "href": "https://api.example.com/v1/usage",
+      "method": "GET",
+      "effect": "read"
+    }
+  ],
   "user_confirmation_required": false,
   "agent_guidance": [
-    "Do not retry in a tight loop.",
-    "Prefer respecting Retry-After and RateLimit headers when present."
+    "Wait at least 30 seconds before retrying. Do not retry in a tight loop - use exponential backoff.",
+    "If this is part of a batch operation, pause the entire batch rather than retrying individual requests, to avoid burning through the remaining quota immediately after reset.",
+    "Prefer the Retry-After and RateLimit response headers over these values when available - headers reflect the actual server state.",
+    "If the user's workflow consistently hits rate limits, suggest they check the /v1/usage endpoint to understand their usage patterns and consider upgrading their plan."
   ],
   "links": [
     {

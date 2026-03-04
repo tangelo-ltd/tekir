@@ -3,20 +3,13 @@
   "title": "Thread is gone",
   "status": 410,
   "detail": "This thread can no longer accept new messages.",
-  "reason": "Threads in state=archived are not writable.",
-  "limitations": [
-    {
-      "code": "thread_archived",
-      "detail": "The thread was archived by the user or system policy.",
-      "target": "/thread_id"
-    }
-  ],
-  "user_confirmation_required": true,
+  "reason": "Threads are archived automatically after 90 days of inactivity or when manually archived by the thread owner. Archived threads are read-only - all messages are still accessible via GET but no new messages can be posted.",
+
   "next_actions": [
     {
       "id": "create_thread",
       "title": "Create a new thread",
-      "description": "Create a new thread if the user wants to continue the conversation.",
+      "description": "Creates a new thread in the same channel. Include previous_thread_id in metadata to link the threads - this preserves conversation history and allows participants to navigate between the old and new thread. The new thread inherits the channel's default notification settings but not the original thread's participant list - participants from the old thread will need to join or be invited.",
       "href": "https://api.example.com/v1/threads",
       "method": "POST",
       "effect": "create",
@@ -26,15 +19,26 @@
           "previous_thread_id": "thr_123"
         }
       }
+    },
+    {
+      "id": "read_archive",
+      "title": "Read archived messages",
+      "description": "Retrieves all messages from the archived thread. Supports pagination via cursor parameter. Messages are returned in chronological order. This is a read-only operation - the archived thread itself cannot be modified.",
+      "href": "https://api.example.com/v1/threads/thr_123/messages",
+      "method": "GET",
+      "effect": "read"
     }
   ],
   "retry_policy": {
     "retryable": false
   },
   "agent_guidance": [
-    "Ask the user whether they want to continue in a new thread.",
-    "If confirmed, create a new thread and include the previous_thread_id for traceability."
+    "Explain to the user that the thread was archived and their message could not be sent.",
+    "Ask whether they want to start a new thread to continue the conversation, and if so, suggest carrying over the original topic.",
+    "If the user just needs to reference old messages, use the read_archive action instead of creating a new thread.",
+    "Do not automatically create a new thread without asking - the user may prefer to move the conversation to a different channel entirely."
   ],
+  "user_confirmation_required": true,
   "links": [
     {
       "rel": "help",

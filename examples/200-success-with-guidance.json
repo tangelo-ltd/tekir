@@ -5,11 +5,13 @@
   "currency": "USD",
   "created_at": "2026-03-04T10:30:00Z",
 
+  "reason": "Order confirmed and queued for processing. Payment has been authorized but not yet captured - capture happens when the warehouse begins packing.",
+
   "next_actions": [
     {
       "id": "track_shipment",
       "title": "Track shipment",
-      "description": "View real-time shipping status and estimated delivery date.",
+      "description": "Returns real-time shipping status including carrier, tracking number, and estimated delivery date. Shipping status updates typically occur every 2-4 hours. For live push notifications instead of polling, register a webhook at /v1/webhooks with event type 'shipment.updated'. The tracking endpoint returns 404 until the warehouse creates a shipment label, which usually happens within 1-2 hours of order confirmation.",
       "href": "https://api.example.com/v1/orders/order_789/tracking",
       "method": "GET",
       "effect": "read"
@@ -17,7 +19,7 @@
     {
       "id": "add_items",
       "title": "Add items to order",
-      "description": "The order can be modified for the next 30 minutes before processing begins.",
+      "description": "Adds products to this order. Only available during the modification window (30 minutes after creation). Adding items may change the shipping cost and delivery estimate. The response will include updated totals. If the user's payment method cannot cover the new total, this endpoint returns 402 with guidance on updating payment.",
       "href": "https://api.example.com/v1/orders/order_789/items",
       "method": "POST",
       "effect": "write",
@@ -33,7 +35,7 @@
     {
       "id": "cancel_order",
       "title": "Cancel order",
-      "description": "Cancel the order for a full refund. Only available before processing starts.",
+      "description": "Cancels the order and releases the payment authorization. This is irreversible. Only available before the warehouse begins processing, which typically starts 30-60 minutes after order confirmation. After that, the user must use the returns process instead.",
       "href": "https://api.example.com/v1/orders/order_789",
       "method": "DELETE",
       "effect": "delete"
@@ -42,13 +44,14 @@
   "limitations": [
     {
       "code": "modification_window",
-      "detail": "Order can only be modified within 30 minutes of creation."
+      "detail": "Order can only be modified within 30 minutes of creation. After 2026-03-04T11:00:00Z, changes require contacting support or using the returns process."
     }
   ],
   "agent_guidance": [
-    "Confirm with the user that the order looks correct.",
-    "If the user wants to track the shipment, use the track_shipment action.",
-    "The modification window closes at 2026-03-04T11:00:00Z."
+    "Present the order summary to the user and ask if everything looks correct before moving on.",
+    "The modification window closes at 2026-03-04T11:00:00Z - if the user might want changes, prioritize that before other tasks.",
+    "Do not poll the tracking endpoint immediately - shipment labels are typically created 1-2 hours after confirmation. Suggest the user check back later or offer to set up a webhook.",
+    "If the user wants to cancel, make sure they understand it is irreversible and confirm explicitly before proceeding."
   ],
   "user_confirmation_required": true,
   "links": [

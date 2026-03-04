@@ -57,12 +57,13 @@ With TEKIR, the same response becomes self-explaining:
   "title": "Thread is gone",
   "status": 410,
 
-  "reason": "Threads in state=archived are not writable.",
+  "reason": "Threads are archived after 90 days of inactivity. Archived threads are read-only - messages are still accessible but no new messages can be posted.",
 
   "next_actions": [
     {
       "id": "create_thread",
       "title": "Create a new thread",
+      "description": "Creates a new thread in the same channel. Include previous_thread_id in metadata to link the threads and preserve conversation history. The new thread inherits channel defaults but not the original participant list.",
       "href": "https://api.example.com/v1/threads",
       "method": "POST",
       "effect": "create"
@@ -70,11 +71,12 @@ With TEKIR, the same response becomes self-explaining:
   ],
 
   "agent_guidance": [
-    "Ask the user whether they want to continue in a new thread."
+    "Explain to the user that the thread was archived and their message could not be sent.",
+    "Ask whether they want to start a new thread - do not create one automatically.",
+    "If the user just needs to reference old messages, use GET /v1/threads/thr_123/messages instead."
   ],
 
   "user_confirmation_required": true,
-
   "retry_policy": { "retryable": false }
 }
 ```
@@ -93,6 +95,7 @@ The agent now knows *why* it failed, *what it can do next*, *what side effects t
     {
       "id": "track_shipment",
       "title": "Track shipment",
+      "description": "Returns real-time shipping status. Tracking info appears 1-2 hours after confirmation. For live updates, register a webhook at /v1/webhooks with event 'shipment.updated' instead of polling.",
       "href": "/orders/order_789/tracking",
       "method": "GET",
       "effect": "read"
@@ -100,6 +103,7 @@ The agent now knows *why* it failed, *what it can do next*, *what side effects t
     {
       "id": "cancel_order",
       "title": "Cancel order",
+      "description": "Cancels the order and releases payment authorization. Irreversible. Only available before warehouse processing starts (30-60 min after confirmation). After that, use the returns process.",
       "href": "/orders/order_789",
       "method": "DELETE",
       "effect": "delete"
@@ -107,8 +111,10 @@ The agent now knows *why* it failed, *what it can do next*, *what side effects t
   ],
 
   "agent_guidance": [
-    "Confirm the order details with the user.",
-    "The modification window closes in 30 minutes."
+    "Present the order summary and ask if everything looks correct before moving on.",
+    "The modification window closes at 2026-03-04T11:00:00Z - prioritize changes before other tasks.",
+    "Do not poll tracking immediately - shipment labels take 1-2 hours. Suggest checking back later.",
+    "If the user wants to cancel, make sure they understand it is irreversible and confirm explicitly."
   ],
 
   "user_confirmation_required": true

@@ -3,21 +3,34 @@
   "title": "Authentication required",
   "status": 401,
   "detail": "Valid authentication credentials are required to access this resource.",
-  "reason": "The token is missing, expired, or invalid.",
+  "reason": "The access token included in this request is either missing, expired, or has been revoked. Tokens issued by this API expire after 1 hour. If the token was recently working, it most likely expired - use the refresh token flow rather than asking the user to log in again.",
+
   "limitations": [
     {
       "code": "invalid_token",
-      "detail": "The presented access token cannot be used."
+      "detail": "The presented access token cannot be used. If you have a refresh token, exchange it for a new access token at the token endpoint. Refresh tokens are valid for 30 days."
     }
   ],
   "user_confirmation_required": true,
   "next_actions": [
     {
       "id": "refresh_token",
-      "title": "Re-authenticate / refresh token",
-      "description": "Obtain a new access token using the configured authorization flow.",
+      "title": "Refresh the access token",
+      "description": "Exchange a valid refresh token for a new access token. This is a silent operation that does not require user interaction if a refresh token is available. The response includes both a new access token (1 hour TTL) and a new refresh token (30 day TTL). If the refresh token is also expired, this will return 401 and the user must re-authenticate from scratch via the authorize endpoint.",
       "href": "https://auth.example.com/oauth/token",
       "method": "POST",
+      "effect": "external",
+      "body": {
+        "grant_type": "refresh_token",
+        "refresh_token": ""
+      }
+    },
+    {
+      "id": "authorize",
+      "title": "Start new authentication",
+      "description": "Initiates a full OAuth2 authorization flow. This requires user interaction - the user will need to log in and grant permissions. Only use this if the refresh token flow fails or no refresh token is available. Opens in the user's browser.",
+      "href": "https://auth.example.com/oauth/authorize",
+      "method": "GET",
       "effect": "external"
     }
   ],
@@ -27,8 +40,10 @@
     "max_attempts": 1
   },
   "agent_guidance": [
-    "Ask the user to confirm re-authentication before initiating any OAuth flow.",
-    "Do not request or display user secrets in plain text."
+    "Try the refresh_token action first - it does not require user interaction and is the preferred recovery path.",
+    "Only fall back to the full authorize flow if the refresh fails. In that case, explain to the user that their session expired and they need to log in again.",
+    "Do not display or log any tokens, refresh tokens, or credentials in plain text.",
+    "After obtaining a new token, retry the original request that triggered this 401 - do not ask the user to repeat their action."
   ],
   "links": [
     {
