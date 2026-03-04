@@ -178,6 +178,45 @@
       }
     }
 
+    /* Design goals */
+    .design-goals {
+      padding: 0 0 60px;
+    }
+
+    .design-goals-inner {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    .design-goals-inner h2 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+
+    .design-goals-inner ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .design-goals-inner li {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .design-goals-inner li::before {
+      content: '\2713';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+    }
+
     /* Visual flow */
     .visual-flow {
       padding: 60px 0 20px;
@@ -799,6 +838,22 @@
     </div>
   </section>
 
+  <!-- Design Goals -->
+  <section class="design-goals">
+    <div class="container">
+      <div class="design-goals-inner">
+        <h2 data-i18n="goals_title">Design Goals</h2>
+        <ul>
+          <li data-i18n="goal_1">Backwards compatible with existing HTTP APIs</li>
+          <li data-i18n="goal_2">Compatible with RFC 9457 Problem Details</li>
+          <li data-i18n="goal_3">Provide structured hints for automated agents</li>
+          <li data-i18n="goal_4">Avoid breaking existing clients</li>
+          <li data-i18n="goal_5">Remain framework and language agnostic</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- Visual Flow Diagram -->
   <section class="visual-flow">
     <div class="container">
@@ -1151,6 +1206,12 @@
         hero_spec: 'Spezifikation lesen',
         story_title: 'Warum "Tekir"?',
         story_text: '<em>Tekir</em> ist das tuerkische Wort fuer Tabby - die ikonische Mischlingskatze, die an jeder Ecke Istanbuls zu finden ist. Tekir-Katzen werden nicht fuer Stammbaum gezuechtet. Sie werden von der Strasse geformt: widerstandsfaehig, gerissen, genetisch vielfaeltig und durch Generationen natuerlicher Selektion geschaerft. Sie brauchen keinen Zuechter oder eine Anleitung - sie finden es selbst heraus. Genau das macht TEKIR fuer APIs: Es gibt jeder Antwort die Strassenintelligenz, sich selbst zu erklaeren, damit Agenten ohne Raten wissen, was zu tun ist.',
+        goals_title: 'Designziele',
+        goal_1: 'Abwaertskompatibel mit bestehenden HTTP-APIs',
+        goal_2: 'Kompatibel mit RFC 9457 Problem Details',
+        goal_3: 'Strukturierte Hinweise fuer automatisierte Agenten bereitstellen',
+        goal_4: 'Bestehende Clients nicht beeintraechtigen',
+        goal_5: 'Framework- und sprachunabhaengig bleiben',
         flow_title: 'Heutige APIs vs. APIs mit TEKIR',
         flow_agent: 'KI-Agent',
         flow_agent_detail: 'Macht einen API-Aufruf',
@@ -1226,6 +1287,12 @@
         hero_spec: 'Spesifikasyonu Oku',
         story_title: 'Neden "Tekir"?',
         story_text: "<em>Tekir</em>, T\u00fcrk\u00e7e'de tekir kedi anlam\u0131na gelir - \u0130stanbul'un her soka\u011f\u0131nda bulunan ikonik melez sokak kedisi. Tekir kediler safkan olarak yeti\u015ftirilmez. Sokaklar taraf\u0131ndan \u015fekillenir: dayan\u0131kl\u0131, kurnaz, genetik olarak \u00e7e\u015fitli ve nesiller boyu do\u011fal se\u00e7ilimle bilenmi\u015f. Bir yeti\u015ftiriciye veya kullanma k\u0131lavuzuna ihtiya\u00e7lar\u0131 yoktur - her \u015feyi kendileri \u00e7\u00f6zerler. TEKIR'in API'ler i\u00e7in yapt\u0131\u011f\u0131 tam olarak budur: her yan\u0131ta kendini a\u00e7\u0131klayacak sokak zekas\u0131 verir, b\u00f6ylece ajanlar tahmin yapmadan ne yapacaklar\u0131n\u0131 bilir.",
+        goals_title: 'Tasarim Hedefleri',
+        goal_1: 'Mevcut HTTP API\'leriyle geriye uyumlu',
+        goal_2: 'RFC 9457 Problem Details ile uyumlu',
+        goal_3: 'Otomatik ajanlar icin yapilandirilmis ipuclari saglar',
+        goal_4: 'Mevcut istemcileri bozmaz',
+        goal_5: 'Framework ve dilden bagimsiz kalir',
         flow_title: "Bug\u00fcnk\u00fc API'ler vs. TEKIR'li API'ler",
         flow_agent: 'Yapay Zeka Ajan\u0131',
         flow_agent_detail: 'API \u00e7a\u011fr\u0131s\u0131 yapar',

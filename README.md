@@ -134,6 +134,16 @@ It builds on [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) (Problem Details
 
 ---
 
+## Design Goals
+
+- Backwards compatible with existing HTTP APIs
+- Compatible with RFC 9457 Problem Details
+- Provide structured hints for automated agents
+- Avoid breaking existing clients
+- Remain framework and language agnostic
+
+---
+
 ## Extension Fields
 
 | Field | Type | Description |
