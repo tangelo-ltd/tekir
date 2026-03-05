@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "tangelo-ltd-tekir",
+  "version": "0.1.0",
+  "description": "TEKIR - Transparent Endpoint Knowledge for Intelligent Reasoning. Build API responses that are self-explaining for AI agents.",
+  "owner": {
+    "name": "Tangelo Bilisim Ltd.",
+    "email": "contact@tangelo.com.tr"
+  },
+  "plugins": [
+    {
+      "name": "tekir",
+      "description": "Build API responses that are self-explaining for AI agents. Adds structured guidance (next_actions, agent_guidance, retry_policy) to HTTP responses following the TEKIR spec.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Tangelo Bilisim Ltd.",
+        "email": "contact@tangelo.com.tr"
+      },
+      "source": ".",
+      "category": "development"
+    }
+  ]
+}

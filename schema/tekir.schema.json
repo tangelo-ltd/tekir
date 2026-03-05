@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://tekir.dev/schema/v0.1",
+  "$id": "https://raw.githubusercontent.com/tangelo-ltd/tekir/main/schema/tekir.schema.json",
   "title": "TEKIR - Transparent Endpoint Knowledge for Intelligent Reasoning",
   "description": "Extension fields for HTTP API responses that provide machine-actionable guidance to AI agents. Can be used in both success (2xx) and error (4xx/5xx) responses.",
   "type": "object",

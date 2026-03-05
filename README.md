@@ -169,7 +169,11 @@ See the [full specification](./spec/tekir-v0.1.md) for detailed field definition
 Install as a Claude Code plugin - gives you the `/tekir` skill.
 
 ```bash
-/plugin install tangelo-ltd/tekir
+# Add the marketplace
+/plugin marketplace add tangelo-ltd/tekir
+
+# Install the plugin
+/plugin install tekir@tangelo-ltd-tekir
 ```
 
 Then type `/tekir` before asking Claude to build an API endpoint.
@@ -188,10 +192,10 @@ curl -o .cursorrules https://raw.githubusercontent.com/tangelo-ltd/tekir/main/pr
 
 That's it. Next time you ask Claude or Cursor to build an API endpoint, it will include TEKIR fields automatically.
 
-### Option 3: TypeScript Package
+### Option 3: TypeScript Package (coming soon)
 
 ```bash
-npm install tekir
+npm install tekir   # not yet published - coming soon
 ```
 
 ```typescript
@@ -316,7 +320,7 @@ See the [`examples/`](./examples/) folder for complete JSON examples:
 Validate your TEKIR responses against the official schema:
 
 ```json
-{ "$ref": "https://tekir.dev/schema/v0.1" }
+{ "$ref": "https://raw.githubusercontent.com/tangelo-ltd/tekir/main/schema/tekir.schema.json" }
 ```
 
 Or use the local schema file: [`schema/tekir.schema.json`](./schema/tekir.schema.json)
