@@ -40,7 +40,7 @@
       }
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     html {
       overflow-x: hidden;
@@ -1165,7 +1165,7 @@
       <p class="lead" data-i18n="discovery_lead">Agents can auto-detect TEKIR support and learn your entire API surface from a single response.</p>
 
       <div class="discovery-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px;">
-        <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px;">
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px; max-width: 100%; overflow: hidden;">
           <h3 style="font-size: 1.1rem; margin-bottom: 8px;" data-i18n="discovery_doc_title">tekir.json</h3>
           <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" data-i18n="discovery_doc_desc">A static discovery document at your API root. Describes endpoints, auth, rate limits, flows, and which TEKIR fields each endpoint uses.</p>
           <div class="code-block"><pre><code>{
@@ -1185,7 +1185,7 @@
   }
 }</code></pre></div>
         </div>
-        <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px;">
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px; max-width: 100%; overflow: hidden;">
           <h3 style="font-size: 1.1rem; margin-bottom: 8px;" data-i18n="discovery_headers_title">Response Headers</h3>
           <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" data-i18n="discovery_headers_desc">Two headers on every response signal TEKIR support and point to the discovery document. Agents detect TEKIR from any request.</p>
           <div class="code-block"><pre><code>HTTP/1.1 200 OK
