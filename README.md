@@ -292,6 +292,54 @@ app.post('/orders', (request, reply) => {
 
 ---
 
+## Discovery
+
+TEKIR includes a discovery mechanism so agents can learn about an API's capabilities without trial and error. It consists of two parts: a static `tekir.json` discovery document and HTTP response headers.
+
+**The `tekir.json` file** is served at the API root and describes endpoints, authentication, rate limits, multi-step flows, and which TEKIR fields each endpoint uses:
+
+```json
+{
+  "tekir_version": "0.1",
+  "api_name": "Acme Commerce API",
+  "base_url": "https://api.acme.com/v2",
+  "auth": {
+    "type": "bearer",
+    "instructions": "Include Authorization: Bearer <token> header."
+  },
+  "endpoints": {
+    "POST /orders": {
+      "summary": "Create order",
+      "tekir_fields": ["reason", "next_actions", "agent_guidance", "user_confirmation_required"],
+      "typical_next_actions": ["track_order", "modify_order", "cancel_order"]
+    }
+  },
+  "flows": {
+    "create_order": {
+      "title": "Place a new order",
+      "steps": [
+        "GET /products - find products",
+        "POST /orders - create order with items",
+        "POST /orders/{id}/confirm - confirm for fulfillment"
+      ]
+    }
+  }
+}
+```
+
+**Response headers** signal TEKIR support on every response:
+
+```http
+TEKIR-Version: 0.1
+TEKIR-Discovery: https://api.acme.com/tekir.json
+```
+
+**The flow:** An agent makes any request to your API, sees the `TEKIR-Discovery` header, fetches `tekir.json`, and immediately knows all endpoints, flows, auth requirements, and which TEKIR fields to expect. No guessing, no trial and error.
+
+See the [full specification](./spec/tekir-v0.1.md#discovery) for the complete discovery document schema.
+
+---
+
 ## How TEKIR Complements Other Standards
 
 | Standard | What it does | How TEKIR fits |

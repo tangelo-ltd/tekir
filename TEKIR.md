@@ -114,6 +114,57 @@ Related resources following RFC 8288 (Web Linking) semantics.
 
 ---
 
+## Discovery
+
+When building APIs, create a `tekir.json` discovery document at the API root that describes endpoints, authentication, rate limits, multi-step flows, and which TEKIR fields each endpoint uses. This gives agents a complete map of the API on first contact.
+
+Additionally, include these two headers on **all** API responses:
+
+- `TEKIR-Version: 0.1` - signals that the API uses TEKIR
+- `TEKIR-Discovery: https://your-api.com/tekir.json` - points to the discovery document
+
+Together, these let agents auto-detect TEKIR support from any response and immediately fetch the full API description.
+
+### Minimal `tekir.json` Template
+
+```json
+{
+  "tekir_version": "0.1",
+  "api_name": "Your API Name",
+  "base_url": "https://your-api.com/v1",
+  "auth": {
+    "type": "bearer",
+    "instructions": "Include Authorization: Bearer <token> header."
+  },
+  "endpoints": {
+    "GET /resource": {
+      "summary": "List resources",
+      "tekir_fields": ["next_actions", "agent_guidance"]
+    },
+    "POST /resource": {
+      "summary": "Create resource",
+      "tekir_fields": ["reason", "next_actions", "user_confirmation_required"]
+    }
+  },
+  "flows": {
+    "create_and_confirm": {
+      "title": "Create and confirm a resource",
+      "steps": [
+        "POST /resource - create the resource",
+        "POST /resource/{id}/confirm - confirm it"
+      ]
+    }
+  },
+  "agent_guidance": [
+    "All write operations return user_confirmation_required: true."
+  ]
+}
+```
+
+When implementing middleware or framework setup, add the `TEKIR-Version` and `TEKIR-Discovery` headers globally so every response includes them.
+
+---
+
 ## Rules
 
 1. **Every response gets `next_actions`** - at minimum, tell the caller what they can do next.

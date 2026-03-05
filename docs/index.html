@@ -710,6 +710,7 @@
 
     @media (max-width: 700px) {
       .standards-grid { grid-template-columns: 1fr; }
+      .discovery-grid { grid-template-columns: 1fr !important; }
     }
 
     .standard-card {
@@ -1128,6 +1129,56 @@
     </div>
   </section>
 
+  <!-- Discovery -->
+  <section class="discovery" style="padding: 60px 0;">
+    <div class="container">
+      <h2 data-i18n="discovery_title">Discovery</h2>
+      <p class="lead" data-i18n="discovery_lead">Agents can auto-detect TEKIR support and learn your entire API surface from a single response.</p>
+
+      <div class="discovery-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px;">
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 8px;" data-i18n="discovery_doc_title">tekir.json</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" data-i18n="discovery_doc_desc">A static discovery document at your API root. Describes endpoints, auth, rate limits, flows, and which TEKIR fields each endpoint uses.</p>
+          <div class="code-block"><pre><code>{
+  "tekir_version": "0.1",
+  "api_name": "Acme Commerce API",
+  "endpoints": {
+    "POST /orders": {
+      "summary": "Create order",
+      "tekir_fields": ["reason", "next_actions", "agent_guidance"]
+    }
+  },
+  "flows": {
+    "create_order": {
+      "title": "Place a new order",
+      "steps": ["GET /products", "POST /orders", "POST /orders/{id}/confirm"]
+    }
+  }
+}</code></pre></div>
+        </div>
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 8px;" data-i18n="discovery_headers_title">Response Headers</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" data-i18n="discovery_headers_desc">Two headers on every response signal TEKIR support and point to the discovery document. Agents detect TEKIR from any request.</p>
+          <div class="code-block"><pre><code>HTTP/1.1 200 OK
+Content-Type: application/json
+TEKIR-Version: 0.1
+TEKIR-Discovery: https://api.acme.com/tekir.json
+
+{
+  "status": 200,
+  "data": { "order_id": "ord_8xk2m" },
+  "reason": "Order created.",
+  "next_actions": [ ... ]
+}</code></pre></div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 24px; color: var(--text-muted); font-size: 0.9rem;" data-i18n="discovery_flow">
+        Agent hits any endpoint &#8594; sees <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">TEKIR-Discovery</code> header &#8594; fetches <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">tekir.json</code> &#8594; knows everything.
+      </p>
+    </div>
+  </section>
+
   <!-- Complementary Standards -->
   <section class="standards">
     <div class="container">
@@ -1274,6 +1325,13 @@
         field_retry: 'Strukturierte Wiederholungshinweise',
         field_links: 'Verwandte Ressourcen (RFC 8288)',
         fields_note: 'Alle Felder sind optional. Fügen Sie sie schrittweise hinzu - schon ein einzelnes <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">next_actions</code> macht einen Unterschied.',
+        discovery_title: 'Discovery',
+        discovery_lead: 'Agenten erkennen TEKIR-Unterstützung automatisch und lernen die gesamte API-Oberfläche aus einer einzigen Antwort.',
+        discovery_doc_title: 'tekir.json',
+        discovery_doc_desc: 'Ein statisches Discovery-Dokument an Ihrem API-Root. Beschreibt Endpoints, Authentifizierung, Rate Limits, Flows und welche TEKIR-Felder jeder Endpoint verwendet.',
+        discovery_headers_title: 'Response Headers',
+        discovery_headers_desc: 'Zwei Header in jeder Antwort signalisieren TEKIR-Unterstützung und verweisen auf das Discovery-Dokument. Agenten erkennen TEKIR bei jeder Anfrage.',
+        discovery_flow: 'Agent ruft beliebigen Endpoint auf &#8594; sieht <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">TEKIR-Discovery</code> Header &#8594; ruft <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">tekir.json</code> ab &#8594; kennt alles.',
         standards_title: 'Spielt gut mit anderen',
         std_rfc: 'TEKIR erweitert Problem Details über Fehler hinaus auf alle Antworten. Jede gültige RFC 9457-Antwort ist eine gültige TEKIR-Antwort.',
         std_mcp: 'MCP kümmert sich um Tool-Erkennung und -Aufruf. TEKIR kümmert sich um das, was zurückkommt - die Antwort. Sie ergänzen sich.',
@@ -1355,6 +1413,13 @@
         field_retry: 'Yap\u0131land\u0131r\u0131lm\u0131\u015f yeniden deneme ipu\u00e7lar\u0131',
         field_links: '\u0130li\u015fkili kaynaklar (RFC 8288)',
         fields_note: 'T\u00fcm alanlar iste\u011fe ba\u011fl\u0131d\u0131r. Kademeli olarak ekleyin - tek bir <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">next_actions</code> bile fark yarat\u0131r.',
+        discovery_title: 'Discovery',
+        discovery_lead: 'Ajanlar TEKIR deste\u011fini otomatik alg\u0131lar ve t\u00fcm API y\u00fczeyini tek bir yan\u0131ttan \u00f6\u011frenir.',
+        discovery_doc_title: 'tekir.json',
+        discovery_doc_desc: 'API k\u00f6k\u00fcn\u00fczdeki statik bir discovery belgesi. Endpointleri, kimlik do\u011frulamay\u0131, h\u0131z limitlerini, ak\u0131\u015flar\u0131 ve her endpointin hangi TEKIR alanlar\u0131n\u0131 kulland\u0131\u011f\u0131n\u0131 tan\u0131mlar.',
+        discovery_headers_title: 'Response Header\u0131lar\u0131',
+        discovery_headers_desc: 'Her yan\u0131tta iki header TEKIR deste\u011fini sinyaller ve discovery belgesine y\u00f6nlendirir. Ajanlar herhangi bir istekten TEKIR\u0027i alg\u0131lar.',
+        discovery_flow: 'Ajan herhangi bir endpoint\u0027e istek atar &#8594; <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">TEKIR-Discovery</code> header\u0131n\u0131 g\u00f6r\u00fcr &#8594; <code style="background: var(--code-bg); color: var(--amber); padding: 2px 6px; border-radius: 4px;">tekir.json</code>\u0027\u0131 \u00e7eker &#8594; her \u015feyi bilir.',
         standards_title: 'Di\u011fer standartlarla uyumlu',
         std_rfc: "TEKIR, Problem Details'\u0131 hatalardan t\u00fcm yan\u0131tlara geni\u015fletir. Her ge\u00e7erli RFC 9457 yan\u0131t\u0131 ge\u00e7erli bir TEKIR yan\u0131t\u0131d\u0131r.",
         std_mcp: "MCP ara\u00e7 ke\u015ffi ve \u00e7al\u0131\u015ft\u0131rmay\u0131 y\u00f6netir. TEKIR geri d\u00f6nenle ilgilenir - yan\u0131tla. Birbirini tamamlarlar.",

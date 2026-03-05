@@ -741,6 +741,180 @@ HATEOAS (Hypermedia as the Engine of Application State) is the REST principle th
 
 Where traditional HATEOAS relied on human developers to interpret hypermedia controls, TEKIR provides enough structure and context for autonomous agents to navigate API workflows safely.
 
+## Discovery
+
+TEKIR-enabled APIs can advertise their capabilities through a static discovery document and HTTP response headers. Discovery is OPTIONAL but RECOMMENDED - it eliminates the cold-start problem by giving agents everything they need to navigate the API without trial and error.
+
+### Discovery Document (`tekir.json`)
+
+A TEKIR discovery document is a static JSON file served at the API root (e.g., `https://api.example.com/tekir.json`). It describes the API's endpoints, authentication, rate limits, multi-step flows, and TEKIR field usage. The file is authored once, checked into version control alongside the API code, and served as a static asset.
+
+The discovery document is RECOMMENDED at the API root path `/tekir.json`. Providers MAY serve it at any path, as long as the `TEKIR-Discovery` header (see below) points to the correct URL.
+
+#### Discovery Document Schema
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `tekir_version` | string | Yes | TEKIR spec version (e.g., `"0.1"`) |
+| `generated_at` | string | No | ISO 8601 timestamp of when the document was generated |
+| `api_name` | string | No | Human-readable API name |
+| `base_url` | string | No | Base URL for the API |
+| `auth` | object | No | Authentication requirements (`type`, `instructions`) |
+| `rate_limits` | object | No | Rate limit information (`default`, per-endpoint overrides) |
+| `endpoints` | object | No | Endpoint map keyed by `"METHOD /path"` |
+| `flows` | object | No | Multi-step workflow descriptions |
+| `agent_guidance` | array of strings | No | API-level guidance for agents |
+
+Each entry in `endpoints` describes a single endpoint:
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `summary` | string | No | Short description of the endpoint |
+| `auth_required` | boolean | No | Whether authentication is required |
+| `rate_limit` | string | No | Endpoint-specific rate limit |
+| `tekir_fields` | array of strings | No | Which TEKIR fields this endpoint includes in responses |
+| `typical_limitations` | array of strings | No | Limitation codes commonly returned |
+| `typical_next_actions` | array of strings | No | Action IDs commonly returned |
+| `notes` | string | No | Additional context for agents |
+
+Each entry in `flows` describes a multi-step workflow:
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `title` | string | Yes | Human-readable flow title |
+| `steps` | array of strings | Yes | Ordered list of steps, each as `"METHOD /path - description"` |
+
+#### Example Discovery Document
+
+```json
+{
+  "tekir_version": "0.1",
+  "generated_at": "2026-03-01T00:00:00Z",
+  "api_name": "Acme Commerce API",
+  "base_url": "https://api.acme.com/v2",
+  "auth": {
+    "type": "bearer",
+    "instructions": "Include Authorization: Bearer <token> header. Obtain tokens from https://auth.acme.com/oauth/token using client_credentials grant."
+  },
+  "global_rate_limit": "100 req/min per API key",
+  "endpoints": {
+    "GET /products": {
+      "summary": "Search products",
+      "auth_required": true,
+      "rate_limit": "200 req/min",
+      "tekir_fields": ["reason", "limitations", "next_actions", "agent_guidance", "links"],
+      "typical_limitations": ["max_page_size", "catalog_subset", "geo_restriction"],
+      "notes": "Paginated. Default page_size=20. Free-tier capped at 25."
+    },
+    "POST /orders": {
+      "summary": "Create order",
+      "auth_required": true,
+      "rate_limit": "10 req/min",
+      "tekir_fields": ["reason", "limitations", "next_actions", "agent_guidance", "user_confirmation_required", "retry_policy"],
+      "typical_next_actions": ["track_order", "modify_order", "cancel_order"],
+      "notes": "Payment authorized on creation, captured on fulfillment."
+    },
+    "GET /orders/{id}": {
+      "summary": "Get order",
+      "auth_required": true,
+      "tekir_fields": ["next_actions", "agent_guidance", "links"],
+      "typical_next_actions": ["modify_order", "cancel_order", "track_shipment"]
+    },
+    "POST /orders/{id}/cancel": {
+      "summary": "Cancel order",
+      "auth_required": true,
+      "tekir_fields": ["reason", "next_actions", "user_confirmation_required"],
+      "notes": "Irreversible. Only available before 'shipped' status."
+    },
+    "GET /orders/{id}/tracking": {
+      "summary": "Track shipment",
+      "auth_required": true,
+      "tekir_fields": ["next_actions", "agent_guidance", "links"],
+      "notes": "Returns 404 until 1-2 hours after order confirmation."
+    }
+  },
+  "flows": {
+    "create_order": {
+      "title": "Place a new order",
+      "steps": [
+        "GET /products - find products",
+        "POST /orders - create order with items",
+        "POST /orders/{id}/confirm - confirm for fulfillment",
+        "GET /orders/{id}/tracking - check shipment (after 1-2 hours)"
+      ]
+    },
+    "cancel_order": {
+      "title": "Cancel an order",
+      "steps": [
+        "GET /orders/{id} - verify status is not 'shipped'",
+        "POST /orders/{id}/cancel - cancel (irreversible)"
+      ]
+    }
+  },
+  "agent_guidance": [
+    "All destructive actions return user_confirmation_required: true.",
+    "Error responses always include retry_policy. Respect the retryable flag.",
+    "Tracking data is delayed 1-2 hours after confirmation - do not poll immediately."
+  ]
+}
+```
+
+### Response Headers
+
+TEKIR defines two HTTP response headers that are RECOMMENDED on all responses from a TEKIR-enabled API:
+
+#### `TEKIR-Version`
+
+Indicates the TEKIR specification version used by the API. The value is a version string matching the `tekir_version` field in the discovery document.
+
+```
+TEKIR-Version: 0.1
+```
+
+This header serves as a signal - an agent can detect TEKIR support by checking for this header on any response, without parsing the response body.
+
+#### `TEKIR-Discovery`
+
+Contains the URL of the API's TEKIR discovery document. The value is an absolute URL pointing to the `tekir.json` file (or equivalent discovery endpoint).
+
+```
+TEKIR-Discovery: https://api.acme.com/tekir.json
+```
+
+#### Auto-Detection Flow
+
+The combination of headers and discovery document enables zero-configuration detection:
+
+1. An agent makes any request to the API
+2. The agent sees `TEKIR-Version` and `TEKIR-Discovery` headers in the response
+3. The agent fetches the URL from `TEKIR-Discovery`
+4. The agent now knows all endpoints, flows, auth requirements, and which TEKIR fields to expect
+
+#### Example Response with Headers
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+TEKIR-Version: 0.1
+TEKIR-Discovery: https://api.acme.com/tekir.json
+
+{
+  "status": 200,
+  "data": { "order_id": "ord_8xk2m", "status": "confirmed" },
+  "reason": "Order created successfully.",
+  "next_actions": [ ... ],
+  "agent_guidance": [ ... ]
+}
+```
+
+### Implementation Notes
+
+- Both headers are RECOMMENDED, not required. An API can include one or both.
+- The discovery document SHOULD be cacheable. Serve it with appropriate `Cache-Control` headers (e.g., `max-age=3600`).
+- The discovery document is static and should be kept in sync with the actual API. Stale discovery data is worse than no discovery data.
+- Agents SHOULD cache the discovery document and refresh it periodically or when they encounter unexpected behavior.
+- Proxies and CDNs that strip custom headers may prevent agents from seeing `TEKIR-Version` and `TEKIR-Discovery`. API providers should ensure these headers are passed through.
+
 ## Versioning
 
 This document defines TEKIR v0.1, the initial public draft.
