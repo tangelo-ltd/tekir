@@ -708,9 +708,35 @@
       gap: 20px;
     }
 
+    .discovery .code-block {
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .discovery .code-block pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .discovery .code-block code {
+      white-space: pre;
+      word-break: normal;
+    }
+
     @media (max-width: 700px) {
       .standards-grid { grid-template-columns: 1fr; }
       .discovery-grid { grid-template-columns: 1fr !important; }
+      .discovery .code-block pre {
+        font-size: 0.75rem;
+        padding: 12px;
+      }
     }
 
     .standard-card {
@@ -806,7 +832,7 @@
         for both successes and errors.
       </p>
       <div class="hero-buttons">
-        <a href="#quickstart" class="btn btn-primary" data-i18n="hero_getstarted">
+        <a href="#get-started" class="btn btn-primary" data-i18n="hero_getstarted">
           Get Started
         </a>
         <a href="https://github.com/tangelo-ltd/tekir/blob/main/spec/tekir-v0.1.md" class="btn btn-secondary" data-i18n="hero_spec">
@@ -1044,7 +1070,7 @@
   </section>
 
   <!-- Quick Start -->
-  <section class="quickstart" id="quickstart">
+  <section class="quickstart" id="get-started">
     <div class="container">
       <h2 data-i18n="qs_title">Get started in seconds</h2>
       <p class="lead" data-i18n="qs_lead">Pick your integration style. All maintained in the same repo.</p>
@@ -1312,7 +1338,7 @@ TEKIR-Discovery: https://api.acme.com/tekir.json
         qs_recommended: 'Empfohlen',
         qs_always_on: 'Immer aktiv',
         qs1_title: 'Claude Code Plugin',
-        qs1_desc: 'Als Plugin installieren. Gibt Ihnen den /tekir-Befehl in Claude Code.',
+        qs1_desc: 'Als Plugin installieren. Gibt dir den /tekir Skill in Claude Code.',
         qs2_title: 'Drop-in-Anweisungen',
         qs2_desc: 'Fügen Sie TEKIR.md zum Projektstamm hinzu. Ihr KI-Assistent folgt dem bei jeder Interaktion.',
         qs3_title: 'Cursor-Regeln',
@@ -1400,8 +1426,8 @@ TEKIR-Discovery: https://api.acme.com/tekir.json
         qs_lead: 'Entegrasyon y\u00f6nteminizi se\u00e7in. Hepsi ayn\u0131 repodan y\u00f6netilir.',
         qs_recommended: '\u00d6nerilen',
         qs_always_on: 'Her zaman aktif',
-        qs1_title: 'Claude Code Eklentisi',
-        qs1_desc: "Eklenti olarak y\u00fckleyin. Claude Code i\u00e7inde /tekir komutunu kullan\u0131n.",
+        qs1_title: 'Claude Code Plugin',
+        qs1_desc: "Plugin olarak kur. Claude Code i\u00e7inde /tekir skill'ini verir.",
         qs2_title: 'Otomatik Talimatlar',
         qs2_desc: "TEKIR.md'yi projenizin k\u00f6k\u00fcne ekleyin. Yapay zeka asistan\u0131 her etkile\u015fimde bunu takip eder.",
         qs3_title: 'Cursor Kurallar\u0131',
