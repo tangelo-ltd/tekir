@@ -186,8 +186,8 @@ Copy [`TEKIR.md`](./TEKIR.md) into your project root or `.claude/` folder. Your 
 # For Claude Code / Claude
 curl -o TEKIR.md https://raw.githubusercontent.com/tangelo-ltd/tekir/main/TEKIR.md
 
-# For Cursor
-curl -o .cursorrules https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md
+# For Cursor (appends to existing .cursorrules)
+curl -sL https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md >> .cursorrules
 ```
 
 That's it. Next time you ask Claude or Cursor to build an API endpoint, it will include TEKIR fields automatically.

@@ -1063,9 +1063,9 @@
         <div class="qs-card">
           <div class="qs-badge">Cursor</div>
           <h3 data-i18n="qs3_title">Cursor Rules</h3>
-          <p data-i18n="qs3_desc">Drop as .cursorrules for automatic TEKIR compliance in Cursor.</p>
-          <pre><code>curl -o .cursorrules \
-  https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+          <p data-i18n="qs3_desc">Append to .cursorrules for automatic TEKIR compliance in Cursor.</p>
+          <pre><code>curl -sL https://raw.githubusercontent.com/tangelo-ltd/tekir/main/prompts/cursor-rules.md \
+  >> .cursorrules</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
         </div>
       </div>
     </div>

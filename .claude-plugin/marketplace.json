@@ -16,7 +16,7 @@
         "name": "Tangelo Bilisim Ltd.",
         "email": "contact@tangelo.com.tr"
       },
-      "source": ".",
+      "source": "./",
       "category": "development"
     }
   ]
