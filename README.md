@@ -169,10 +169,10 @@ See the [full specification](./spec/tekir-v0.1.md) for detailed field definition
 Install as a Claude Code plugin - gives you the `/tekir` skill.
 
 ```bash
-# Add the marketplace
 /plugin marketplace add tangelo-ltd/tekir
+```
 
-# Install the plugin
+```bash
 /plugin install tekir@tangelo-ltd-tekir
 ```
 
