@@ -806,11 +806,14 @@
         for both successes and errors.
       </p>
       <div class="hero-buttons">
-        <a href="https://github.com/tangelo-ltd/tekir" class="btn btn-primary" data-i18n="hero_github">
-          View on GitHub
+        <a href="#quickstart" class="btn btn-primary" data-i18n="hero_getstarted">
+          Get Started
         </a>
         <a href="https://github.com/tangelo-ltd/tekir/blob/main/spec/tekir-v0.1.md" class="btn btn-secondary" data-i18n="hero_spec">
           Read the Spec
+        </a>
+        <a href="https://github.com/tangelo-ltd/tekir" class="btn btn-secondary" data-i18n="hero_github">
+          View on GitHub
         </a>
       </div>
       <div style="margin-top: 16px;">
@@ -1041,7 +1044,7 @@
   </section>
 
   <!-- Quick Start -->
-  <section class="quickstart">
+  <section class="quickstart" id="quickstart">
     <div class="container">
       <h2 data-i18n="qs_title">Get started in seconds</h2>
       <p class="lead" data-i18n="qs_lead">Pick your integration style. All maintained in the same repo.</p>
@@ -1255,6 +1258,7 @@ TEKIR-Discovery: https://api.acme.com/tekir.json
     const translations = {
       de: {
         hero_intro: 'TEKIR ist ein offener Standard, der HTTP-API-Antworten <strong>für KI-Agenten selbsterklärend</strong> macht. Statt kryptischer Statuscodes, die Agenten zum Raten zwingen, teilen TEKIR-angereicherte Antworten dem Aufrufer mit, <strong>was passiert ist</strong>, <strong>warum</strong> und <strong>was als Nächstes zu tun ist</strong> - sowohl bei Erfolgen als auch bei Fehlern.',
+        hero_getstarted: 'Loslegen',
         hero_github: 'Auf GitHub ansehen',
         hero_spec: 'Spezifikation lesen',
         story_title: 'Warum "Tekir"?',
@@ -1343,7 +1347,8 @@ TEKIR-Discovery: https://api.acme.com/tekir.json
       },
       tr: {
         hero_intro: 'TEKIR, HTTP API yan\u0131tlar\u0131n\u0131 <strong>yapay zeka ajanlar\u0131 i\u00e7in kendi kendini a\u00e7\u0131klayan</strong> hale getiren a\u00e7\u0131k bir standartt\u0131r. Ajanlar\u0131 tahmin yapmaya zorlayan anla\u015f\u0131lmaz durum kodlar\u0131 yerine, TEKIR ile zenginle\u015ftirilmi\u015f yan\u0131tlar arayana <strong>ne oldu\u011funu</strong>, <strong>neden oldu\u011funu</strong> ve <strong>s\u0131rada ne yap\u0131laca\u011f\u0131n\u0131</strong> s\u00f6yler - hem ba\u015far\u0131l\u0131 hem de hatal\u0131 yan\u0131tlarda.',
-        hero_github: "GitHub'da G\u00f6r\u00fcnt\u00fcle",
+        hero_getstarted: 'Başlayın',
+        hero_github: "GitHub'da Görüntüle",
         hero_spec: 'Spesifikasyonu Oku',
         story_title: 'Neden "Tekir"?',
         story_text: "<em>Tekir</em>, T\u00fcrk\u00e7e'de tekir kedi anlam\u0131na gelir - \u0130stanbul'un her soka\u011f\u0131nda bulunan ikonik melez sokak kedisi. Tekir kediler safkan olarak yeti\u015ftirilmez. Sokaklar taraf\u0131ndan \u015fekillenir: dayan\u0131kl\u0131, kurnaz, genetik olarak \u00e7e\u015fitli ve nesiller boyu do\u011fal se\u00e7ilimle bilenmi\u015f. Bir yeti\u015ftiriciye veya kullanma k\u0131lavuzuna ihtiya\u00e7lar\u0131 yoktur - her \u015feyi kendileri \u00e7\u00f6zerler. TEKIR'in API'ler i\u00e7in yapt\u0131\u011f\u0131 tam olarak budur: her yan\u0131ta kendini a\u00e7\u0131klayacak sokak zekas\u0131 verir, b\u00f6ylece ajanlar tahmin yapmadan ne yapacaklar\u0131n\u0131 bilir.",
